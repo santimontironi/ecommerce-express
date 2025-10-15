@@ -1,6 +1,6 @@
 import { Router } from "express";
-import helloWord from "../controllers/preference-controller.js";
+import createPreference from "./controllers/preference-controller.js";
 
 export const router = Router();
 
-router.get("/", helloWord);
+router.post("/create-preference", createPreference);
