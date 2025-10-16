@@ -9,7 +9,7 @@ export default async function createPreference(req, res){
     ],
     payer: {
       email: buyer_email,
-      address: buyer_address ? { street_name: buyer_address } : undefined,
+      address: { street_name: buyer_address } // así cumple con el formato esperado por MP
     },
     back_urls: {
       success: 'http://localhost:3000/success',
@@ -24,7 +24,6 @@ export default async function createPreference(req, res){
     const response = await mercadopago.preferences.create(preference);
     res.json({ id: response.body.id });
   } catch (err) {
-    console.log(err);
-    res.status(500).send('Error creando preferencia');
+    res.status(500).json({message: 'Error creando preferencia', err: err.message});
   }
 };
