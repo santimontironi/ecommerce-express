@@ -1,5 +1,5 @@
 import { Router } from "express";
-import createPreference from "./controllers/preference-controller.js";
+import { createPreference } from "../controllers/preference-controller.js";
 
 export const router = Router();
 
