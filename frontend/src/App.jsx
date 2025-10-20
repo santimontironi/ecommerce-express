@@ -14,9 +14,13 @@ const App = () => {
         <Route path="/pay-correct" element={<PayCorrect />} />
         <Route path="/pay-pending" element={<PayPending />} />
         <Route path="/pay-fail" element={<PayFail />} />
-        <ProductProvider>
-          <Route path="/checkout/:id" element={<Checkout />} />
-        </ProductProvider>
+        <Route path="/checkout/:id"
+          element={
+            <ProductProvider>
+              <Checkout />
+            </ProductProvider>
+          }
+        />
       </Routes>
     </BrowserRouter>
   )
