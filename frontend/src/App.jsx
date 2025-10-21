@@ -10,6 +10,7 @@ import Admin from "./pages/Admin";
 import { ProductProvider } from "../context/getProductContext";
 import { AllProductsProvider } from "../context/getAllProducts";
 import { AdminProvider } from "../context/adminContext";
+import SecurityRoutes from "./components/SecurityRoutes";
 
 const App = () => {
   return (
@@ -37,8 +38,13 @@ const App = () => {
         />
 
         <Route element={<AdminProvider />}>
+
           <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/admin" element={<Admin />} />
+
+          <Route path="/admin" element={<SecurityRoutes />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
+          
         </Route>
 
       </Routes>
