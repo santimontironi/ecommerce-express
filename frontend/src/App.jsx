@@ -4,6 +4,7 @@ import PayFail from "./pages/PayFail";
 import PayPending from "./pages/PayPending";
 import Products from "./pages/Products";
 import Checkout from "./pages/Checkout";
+import Layout from "../layout/Layout";
 import { ProductProvider } from "../context/getProductContext";
 import { AllProductsProvider } from "../context/getAllProducts";
 
@@ -11,8 +12,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Layout />} />
         <Route
-          path="/"
+          path="/products"
           element={<AllProductsProvider>
             <Products />
           </AllProductsProvider>} />

@@ -3,7 +3,7 @@ const products = [
     id: 1,
     nombre: "Zapatillas Nike Air Force 1",
     descripcion: "Clásicas zapatillas urbanas con suela de goma y diseño icónico.",
-    precio: 120000,
+    precio: 10,
     imagen: "https://i.pinimg.com/736x/0e/66/28/0e6628c244eba991906e52dd0d033bc2.jpg",
     stock: 10,
     categoria: "Calzado"

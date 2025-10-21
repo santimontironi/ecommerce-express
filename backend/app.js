@@ -1,5 +1,6 @@
 import express from "express";
-import { router } from "./routes/preference-routes.js";
+import { router as preferenceRouter } from "./routes/preference-routes.js";
+import { router as adminRouter } from "./routes/admin-routes.js";
 import connectDB from "./bd/bd.js";
 import cors from "cors";
 
@@ -15,6 +16,7 @@ app.use(cors(
 
 connectDB();
 
-app.use('',router);
+app.use('', preferenceRouter);
+app.use('', adminRouter);
 
 export default app;
