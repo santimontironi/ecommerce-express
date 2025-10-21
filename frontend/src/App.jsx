@@ -5,16 +5,22 @@ import PayPending from "./pages/PayPending";
 import Products from "./pages/Products";
 import Checkout from "./pages/Checkout";
 import { ProductProvider } from "../context/getProductContext";
+import { AllProductsProvider } from "../context/getAllProducts";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Products />} />
+        <Route
+          path="/"
+          element={<AllProductsProvider>
+            <Products />
+          </AllProductsProvider>} />
         <Route path="/pay-correct" element={<PayCorrect />} />
         <Route path="/pay-pending" element={<PayPending />} />
         <Route path="/pay-fail" element={<PayFail />} />
-        <Route path="/checkout/:id"
+        <Route
+          path="/checkout/:id"
           element={
             <ProductProvider>
               <Checkout />
