@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { addProduct } from "../controllers/admin-controllers.js";
+import { addProduct, loginAdmin } from "../controllers/admin-controllers.js";
 
 export const router = Router();
 
+router.post("/login-admin", loginAdmin);
 router.post("/add-product", addProduct);
 
