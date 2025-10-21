@@ -1,4 +1,5 @@
 import Admin from "../models/admin.js"
+import Product from "../models/products.js"
 import bcrypt from "bcrypt"
 
 export const registerAdmin = async (req, res) => {
@@ -42,3 +43,28 @@ export const loginAdmin = async (req, res) => {
         return res.json({message: 'Error al iniciar sesión', error: error.message})
     }
 }
+
+export const addProduct = async (req,res) => {
+    try{
+        const {name, description, price, stock, category} = req.body
+        const {image} = req.file
+
+        const product = new Product({
+            image,
+            title: name,
+            description,
+            price,
+            stock,
+            category
+        })
+
+        await product.save()
+    }
+    catch(error){
+        return res.json({message: 'Error al agregar un producto', error: error.message})
+    }
+}
+
+
+
+
