@@ -6,6 +6,7 @@ import Products from "./pages/Products";
 import Checkout from "./pages/Checkout";
 import Layout from "../layout/Layout";
 import AdminLogin from "./pages/AdminLogin";
+import Admin from "./pages/Admin";
 import { ProductProvider } from "../context/getProductContext";
 import { AllProductsProvider } from "../context/getAllProducts";
 import { AdminProvider } from "../context/adminContext";
@@ -35,14 +36,10 @@ const App = () => {
           }
         />
 
-        <Route
-          path="/admin-login"
-          element={
-            <AdminProvider>
-              <AdminLogin />
-            </AdminProvider>
-          }
-        />
+        <Route element={<AdminProvider />}>
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin" element={<Admin />} />
+        </Route>
 
       </Routes>
     </BrowserRouter>

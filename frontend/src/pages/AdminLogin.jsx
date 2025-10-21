@@ -1,14 +1,19 @@
 import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { AdminContext } from "../../context/adminContext";
 
 const AdminLogin = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = async (data) => {
-    try{
-      
-    }
-    catch(error){
+  const { signInAdmin, loading } = useContext(AdminContext);
 
+  const onSubmit = async (data) => {
+    try {
+      await signInAdmin(data);
+      window.location.href = "/admin";
+    }
+    catch (error) {
+      console.log(error);
     }
   };
 
