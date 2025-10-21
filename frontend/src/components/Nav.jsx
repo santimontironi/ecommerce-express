@@ -32,7 +32,7 @@ const Nav = () => {
             <li><Link to="/nosotros">Nosotros</Link></li>
             <li><Link to="/productos">Productos</Link></li>
             <li><Link to="/contacto">Contacto</Link></li>
-            <li><Link to="/ingreoAdmin">Administrador</Link></li>
+            <li><Link to="/admin-login">Administrador</Link></li>
           </ul>
         </nav>
 

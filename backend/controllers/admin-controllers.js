@@ -38,7 +38,7 @@ export const loginAdmin = async (req, res) => {
       return res.status(401).json({ message: "Credenciales incorrectas" });
     }
 
-    return res.status(200).json({ message: "Inicio de sesión exitoso" });
+    return res.status(200).json({ message: "Inicio de sesión exitoso" }, admin);
     
   } catch (error) {
     console.error(error);
