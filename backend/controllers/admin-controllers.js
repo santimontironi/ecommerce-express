@@ -2,6 +2,7 @@ import Admin from "../models/admin.js"
 import Product from "../models/products.js"
 import bcrypt from "bcrypt"
 import dotenv from "dotenv"
+import jwt from 'jsonwebtoken'
 
 const createAdmin = async () => {
   try {
@@ -16,7 +17,7 @@ const createAdmin = async () => {
     await admin.save();
 
     console.log("Administrador creado!");
-   
+
   } catch (error) {
     console.error(error);
   }
@@ -31,40 +32,70 @@ export const loginAdmin = async (req, res) => {
     if (!admin) {
       return res.status(401).json({ message: "Credenciales incorrectas" });
     }
-    
+
     const isPasswordValid = await bcrypt.compare(password, admin.password);
 
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Credenciales incorrectas" });
     }
 
-    return res.status(200).json({ message: "Inicio de sesión exitoso" }, admin);
-    
+    const token = jwt.sign(
+      { id: admin._id }, //payload, datos del usuario
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    )
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 86400000
+    });
+
+    return res.status(200).json({ message: "Inicio de sesión exitoso", admin });
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
-export const addProduct = async (req,res) => {
-    try{
-        const {name, description, price, stock, category} = req.body
-        const {image} = req.file
+export const dashboardAdmin = async (req,res) => {
+  try{
+    const adminId = req.adminId
+    const admin = await Admin.findById(adminId)
 
-        const product = new Product({
-            image,
-            title: name,
-            description,
-            price,
-            stock,
-            category
-        })
+    return res.status(200).json({authenticated: true, admin})
+  }
+  catch(error){
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+}
 
-        await product.save()
-    }
-    catch(error){
-        return res.json({message: 'Error al agregar un producto', error: error.message})
-    }
+export const logoutAdmin = async (req, res) => {
+  res.clearCookie("token");
+  return res.status(200).json({ message: "Cierre de sesión exitoso" });
+};
+
+export const addProduct = async (req, res) => {
+  try {
+    const { name, description, price, stock, category } = req.body
+    const { image } = req.file
+
+    const product = new Product({
+      image,
+      title: name,
+      description,
+      price,
+      stock,
+      category
+    })
+
+    await product.save()
+  }
+  catch (error) {
+    return res.json({ message: 'Error al agregar un producto', error: error.message })
+  }
 }
 
 

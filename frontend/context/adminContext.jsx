@@ -6,10 +6,11 @@ export const AdminContext = createContext();
 
 export const AdminProvider = () => {
     const [admin, setAdmin] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const signInAdmin = async (data) => {
         try {
+            setLoading(true);
             const res = await loginAdminApi(data);
             setAdmin(res.data.admin);
             return res.data;

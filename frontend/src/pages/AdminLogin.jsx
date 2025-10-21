@@ -1,24 +1,32 @@
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AdminContext } from "../../context/adminContext";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
+  const [errorLogin,setErrorLogin] = useState('')
+
   const { signInAdmin, loading } = useContext(AdminContext);
+
+  const navigate = useNavigate()
 
   const onSubmit = async (data) => {
     try {
       await signInAdmin(data);
-      window.location.href = "/admin";
+      navigate('/admin')
     }
     catch (error) {
-      console.log(error);
+      setErrorLogin(error.response?.data?.message || 'Error al iniciar sesión')
     }
   };
 
   return (
-    <div className="containerAdminLogin min-h-screen flex items-center justify-center px-4">
+    <div className="containerAdminLogin min-h-screen flex flex-col items-center justify-center px-4">
+
+      {loading && <p className="text-center text-2xl">Cargando...</p>}
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-[#dbd8d8] shadow-[8px_8px_10px_rgba(0,0,0,0.8)] w-[300px] md:w-[400px] lg:w-[500px] xl:w-[600px] 2xl:w-[800px] rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col gap-6"
@@ -66,6 +74,8 @@ const AdminLogin = () => {
           Ingresar
         </button>
       </form>
+
+      {errorLogin && <p className="text-red-600 text-xl rounded-xl bg-white p-[10px] font-bold mt-[30px]">{errorLogin}</p>}
     </div>
   );
 };
