@@ -2,47 +2,24 @@ import Admin from "../models/admin.js"
 import Product from "../models/products.js"
 import bcrypt from "bcrypt"
 
-export const registerAdmin = async (req, res) => {
-    try{
-        const {username,password} = req.body
+const loginAdmin = async () => {
+  try {
 
-        const salt = await bcrypt.genSalt(10) //genera un "salt" con 10 rondas de complejidad.
-        const hashedPassword = await bcrypt.hash(password,salt)
+    const username = "torines2025";
+    const password = "mayonesanatura";
 
-        const admin = new Admin({
-            userName: username,
-            password: hashedPassword
-        })
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-        await admin.save()
-    }
-    catch(error){
-        return res.json({message: 'Error al iniciar sesión', error: error.message})
-    }
-}
+    const admin = new Admin({ username, password: hashedPassword });
+    await admin.save();
 
-export const loginAdmin = async (req, res) => {
-    try{
-        const {username,password} = req.body
-
-        const admin = await Admin.findOne({userName: username})
-
-        if(!admin){
-            return res.json({message: 'El usuario no existe'})
-        }
-
-        const isMatch = await bcrypt.compare(password,admin.password)
-
-        if(!isMatch){
-            return res.json({message: 'Contraseña incorrecta'})
-        }
-
-        return res.json({message: 'Inicio de sesión exitoso'})
-    }
-    catch(error){
-        return res.json({message: 'Error al iniciar sesión', error: error.message})
-    }
-}
+    console.log("Administrador creado!");
+   
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const addProduct = async (req,res) => {
     try{

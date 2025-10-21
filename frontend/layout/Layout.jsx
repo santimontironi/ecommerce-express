@@ -1,6 +1,12 @@
+import Home from "../src/pages/Home"
+import Nav from "../src/components/Nav"
+
 const Layout = () => {
   return (
-    <div>Layout</div>
+    <div>
+      <Nav />
+      <Home />
+    </div>
   )
 }
 
