@@ -1,4 +1,4 @@
-import { getAllProducts } from "../controllers/admin-controllers";
+import { getAllProducts } from "../controllers/admin-controllers.js";
 import { Router } from "express";
 
 export const router = Router();

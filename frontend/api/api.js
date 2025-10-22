@@ -7,15 +7,19 @@ export const loginAdminApi = (data) => {
 }
 
 export const addProductApi = (data) => {
-    return axios.post(`${urlApi}/add-product`, data);
-}
-
-export const getAllProductsAdminApi = () => {
-    return axios.get(`${urlApi}/admin-productos`);
+    return axios.post(`${urlApi}/add-product`, data, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
 }
 
 export const dashboardAdminApi = () => {
     return axios.get(`${urlApi}/dashboard-admin`);
+}
+
+export const getAllProductsAdminApi = () => {
+    return axios.get(`${urlApi}/admin-productos`);
 }
 
 export const preferenceApi = (data) => {
