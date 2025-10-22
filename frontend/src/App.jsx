@@ -18,9 +18,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />} />
 
-        <Route
-          path="/productos"
-          element={<AllProductsProvider>
+        <Route path="/productos" 
+        element={<AllProductsProvider>
             <Products />
           </AllProductsProvider>} />
 
