@@ -24,7 +24,7 @@ const Admin = () => {
 
         <Link to="/agregar-producto" className="bg-blue-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl 
         hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">
-          Agregar productos
+          Agregar producto
         </Link>
       </div>
 
