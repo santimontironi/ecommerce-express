@@ -41,10 +41,12 @@ const App = () => {
 
           <Route path="/admin-login" element={<AdminLogin />} />
 
-          <Route path="/admin" element={<SecurityRoutes />}>
-            <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<SecurityRoutes>
+            <Admin />
+          </SecurityRoutes>}>
+
           </Route>
-          
+
         </Route>
 
       </Routes>

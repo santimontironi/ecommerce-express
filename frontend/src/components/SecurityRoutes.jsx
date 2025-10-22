@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
-import { AdminContext } from "../../context/adminContext";
+import { AdminContext } from "../../context/adminContext"
+import Loader from "./Loader";
 
 const SecurityRoutes = ({ children }) => {
 
