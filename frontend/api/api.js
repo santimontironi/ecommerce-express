@@ -10,6 +10,10 @@ export const addProductApi = (data) => {
     return axios.post(`${urlApi}/add-product`, data);
 }
 
+export const getAllProductsAdminApi = () => {
+    return axios.get(`${urlApi}/admin-productos`);
+}
+
 export const dashboardAdminApi = () => {
     return axios.get(`${urlApi}/dashboard-admin`);
 }

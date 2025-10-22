@@ -74,13 +74,32 @@ export const dashboardAdmin = async (req,res) => {
 
 export const getAllProducts = async (req,res) => {
   try{
-    const products = await Product.find()
+    const products = await Product.find({active:true})
     return res.status(200).json({products})
   }
   catch(error){
     return res.status(500).json({ message: "Error interno del servidor" });
   }
 }
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const product = await Product.findByIdAndUpdate(
+      productId,
+      { active: false }
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+
+    return res.status(200).json({ message: "Producto desactivado exitosamente", product });
+  } catch (error) {
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
 
 export const logoutAdmin = async (req, res) => {
   res.clearCookie("token");
