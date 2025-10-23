@@ -1,4 +1,4 @@
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useContext, useState, useEffect } from "react";
 import { AdminContext } from "../../context/adminContext";
 import { useNavigate } from "react-router-dom";
@@ -84,7 +84,7 @@ const AdminLogin = () => {
         </form>
       }
 
-      {errorLogin && <p className="text-white text-xl rounded-xl bg-red-600 p-[10px] font-bold mt-[30px]">{errorLogin}</p>}
+      {errorLogin && <p className="text-white text-xl rounded-xl bg-red-600 p-2.5 font-bold mt-[30px]">{errorLogin}</p>}
     </div>
   );
 };

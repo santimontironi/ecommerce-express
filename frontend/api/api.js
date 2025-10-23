@@ -22,6 +22,10 @@ export const getAllProductsAdminApi = () => {
     return axios.get(`${urlApi}/admin-productos`);
 }
 
+export const getProductByIdApi = (id) => {
+    return axios.get(`${urlApi}/producto/${id}`);
+}
+
 export const preferenceApi = (data) => {
     return axios.post(`${urlApi}/create-preference`, data);
 }

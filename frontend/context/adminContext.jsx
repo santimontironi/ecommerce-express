@@ -1,5 +1,5 @@
-import { createContext, useState } from "react";
-import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi } from "../api/api";
+import { createContext, useState, useEffect } from "react";
+import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi } from "../api/api";
 import { Outlet } from "react-router-dom";
 
 export const AdminContext = createContext();
@@ -7,6 +7,8 @@ export const AdminContext = createContext();
 export const AdminProvider = () => {
     const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [correct, setCorrect] = useState(false);
 
     const signInAdmin = async (data) => {
         try {
@@ -20,7 +22,7 @@ export const AdminProvider = () => {
         } finally {
             setTimeout(() => {
                 setLoading(false);
-            },1500)
+            }, 1500)
         }
     };
 
@@ -28,7 +30,7 @@ export const AdminProvider = () => {
         try {
             setLoading(true);
             const res = await dashboardAdminApi();
-            if(res.data.authenticated === false) {
+            if (res.data.authenticated === false) {
                 setAdmin(null)
                 return
             }
@@ -40,26 +42,46 @@ export const AdminProvider = () => {
         } finally {
             setTimeout(() => {
                 setLoading(false);
-            },1500)
+            }, 1500)
         }
     };
 
-    const getAllProducts = async () => {
+
+    useEffect(() => {
+        const getAllProducts = async () => {
+            try {
+                setLoading(true);
+                const res = await getAllProductsAdminApi();
+                setProducts(res.data.products);
+            } catch (error) {
+                throw error;
+            } finally {
+                setTimeout(() => {
+                    setLoading(false);
+                }, 1500)
+            }
+        };
+        getAllProducts();
+    },[])
+
+
+    const addProduct = async (data) => {
         try {
             setLoading(true);
-            const res = await getAllProductsAdminApi();
+            const res = await addProductApi(data);
+            setCorrect(true);
             return res.data;
         } catch (error) {
             throw error;
         } finally {
             setTimeout(() => {
                 setLoading(false);
-            },1500)
+            }, 1500)
         }
     };
 
     return (
-        <AdminContext.Provider value={{ admin, signInAdmin, loading, getAdmin, getAllProducts }}>
+        <AdminContext.Provider value={{ admin, signInAdmin, loading, getAdmin, products, addProduct, correct }}>
             <Outlet />
         </AdminContext.Provider>
     );

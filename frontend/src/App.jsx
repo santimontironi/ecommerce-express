@@ -5,6 +5,7 @@ import PayPending from "./pages/PayPending";
 import Layout from "../layout/Layout";
 import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
+import AddProduct from "./pages/AddProduct";
 import { AdminProvider } from "../context/adminContext";
 import SecurityRoutes from "./components/SecurityRoutes";
 
@@ -26,6 +27,7 @@ const App = () => {
 
           <Route path="/admin" element={<SecurityRoutes>
             <Admin />
+            <AddProduct />
           </SecurityRoutes>}>
 
           </Route>

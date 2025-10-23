@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom"
+import { useContext } from "react"
+import { AdminContext } from "../../context/adminContext"
+import Products from "../components/Products"
+import Loader from "../components/Loader"
 
 const Admin = () => {
+
+  const { products, loading } = useContext(AdminContext)
+
   return (
     <div className="min-h-screen w-full containerAdmin flex flex-col items-center justify-center">
 
@@ -27,6 +34,12 @@ const Admin = () => {
           Agregar producto
         </Link>
       </div>
+
+
+      {loading ? <Loader/> : (
+        <Products products={products} />
+      )}
+
 
     </div>
   )
