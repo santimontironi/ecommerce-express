@@ -6,7 +6,7 @@ import Loader from "../components/Loader"
 
 const Admin = () => {
 
-  const { products, loading } = useContext(AdminContext)
+  const { products } = useContext(AdminContext)
 
   return (
     <div className="min-h-screen w-full containerAdmin flex flex-col items-center justify-center">
@@ -36,9 +36,9 @@ const Admin = () => {
       </div>
 
 
-      {loading ? <Loader/> : (
-        <Products products={products} />
-      )}
+
+      <Products products={products} />
+
 
 
     </div>

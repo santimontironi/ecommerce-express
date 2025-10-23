@@ -26,34 +26,19 @@ export const AdminProvider = () => {
         }
     };
 
-    const getAdmin = async () => {
-        try {
-            setLoading(true);
-            const res = await dashboardAdminApi();
-            if (res.data.authenticated === false) {
-                setAdmin(null)
-                return
-            }
-            setAdmin(res.data.admin);
-            return res.data;
-        } catch (error) {
-            setAdmin(null);
-            throw error;
-        } finally {
-            setTimeout(() => {
-                setLoading(false);
-            }, 1500)
-        }
-    };
-
-
     useEffect(() => {
-        const getAllProducts = async () => {
+        const getAdmin = async () => {
             try {
                 setLoading(true);
-                const res = await getAllProductsAdminApi();
-                setProducts(res.data.products);
+                const res = await dashboardAdminApi();
+                if (res.data.authenticated === false) {
+                    setAdmin(null)
+                    return
+                }
+                setAdmin(res.data.admin);
+                return res.data;
             } catch (error) {
+                setAdmin(null);
                 throw error;
             } finally {
                 setTimeout(() => {
@@ -61,8 +46,21 @@ export const AdminProvider = () => {
                 }, 1500)
             }
         };
+        getAdmin();
+    }, [])
+
+
+    useEffect(() => {
+        const getAllProducts = async () => {
+            try {
+                const res = await getAllProductsAdminApi();
+                setProducts(res.data.products);
+            } catch (error) {
+                throw error;
+            }
+        };
         getAllProducts();
-    },[])
+    }, [])
 
 
     const addProduct = async (data) => {
@@ -70,6 +68,11 @@ export const AdminProvider = () => {
             setLoading(true);
             const res = await addProductApi(data);
             setCorrect(true);
+
+            setTimeout(() => {
+                setCorrect(false);
+            },2000)
+            
             return res.data;
         } catch (error) {
             throw error;
@@ -81,7 +84,7 @@ export const AdminProvider = () => {
     };
 
     return (
-        <AdminContext.Provider value={{ admin, signInAdmin, loading, getAdmin, products, addProduct, correct }}>
+        <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct, correct }}>
             <Outlet />
         </AdminContext.Provider>
     );
