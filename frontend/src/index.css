@@ -1,4 +1,9 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
 
 .containerAdminLogin{
     background: linear-gradient(to right,#101010,#101010,#5E5E5E,#5E5E5E);

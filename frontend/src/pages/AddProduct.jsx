@@ -3,6 +3,7 @@ import { AdminContext } from "../../context/adminContext"
 import Loader from "../components/Loader"
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import GoBack from "../components/GoBack";
 
 const AddProduct = () => {
 
@@ -27,7 +28,11 @@ const AddProduct = () => {
 
     return (
         <div className="containerAddProduct min-h-screen w-full bg-gray-50 flex items-center justify-center px-4 py-8 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
+
+            <GoBack url="/admin" />
+
             {loading ? <Loader /> : (
+                
                 <form method="post" onSubmit={handleSubmit(handleForm)} className="w-full max-w-[400px] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] bg-white p-6 rounded-lg shadow-lg">
 
                     <h1 className="text-center text-2xl mb-4 bg-black text-white p-3 rounded-lg">Nuevo producto</h1>
