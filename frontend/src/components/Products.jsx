@@ -3,10 +3,10 @@ import Product from "./Product"
 const Products = ({ products }) => {
 
     return (
-        <div className="w-full h-screen">
+        <div className="w-full">
             <div className="xl:grid xl:grid-cols-3 xl:w-[1100px] xl:m-auto xl:gap-5 place-content-center justify-center items-stretch">
 
-                {products.map((product) => (
+                {products?.map((product) => (
                     <Product key={product.id}
                         id={product.id}
                         productName={product.nombre}

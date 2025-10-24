@@ -15,7 +15,9 @@ export const addProductApi = (data) => {
 }
 
 export const dashboardAdminApi = () => {
-    return axios.get(`${urlApi}/dashboard-admin`);
+    return axios.get(`${urlApi}/dashboard-admin`,{
+        withCredentials: true
+    });
 }
 
 export const getAllProductsAdminApi = () => {

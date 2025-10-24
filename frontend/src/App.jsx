@@ -15,21 +15,24 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />} />
 
-      
+
         <Route path="/pay-correct" element={<PayCorrect />} />
         <Route path="/pay-pending" element={<PayPending />} />
         <Route path="/pay-fail" element={<PayFail />} />
 
-      
+
         <Route element={<AdminProvider />}>
 
           <Route path="/admin-login" element={<AdminLogin />} />
 
           <Route path="/admin" element={<SecurityRoutes>
             <Admin />
-            <AddProduct />
           </SecurityRoutes>}>
+          </Route>
 
+          <Route path="/add-product" element={<SecurityRoutes>
+            <AddProduct/>
+          </SecurityRoutes>}>
           </Route>
 
         </Route>
