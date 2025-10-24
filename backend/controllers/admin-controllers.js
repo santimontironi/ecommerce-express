@@ -48,7 +48,7 @@ export const loginAdmin = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', //es true cuando estamos en https, en desarollo es http
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", //lax es para que se envie el cookie en el mismo dominio (localhost), y none es para que sea en diferentes
       maxAge: 86400000
     });
 
@@ -108,7 +108,7 @@ export const logoutAdmin = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category } = req.body
+    const { name, description, price, stock } = req.body
     const { image } = req.file
 
     const product = new Product({
@@ -116,7 +116,6 @@ export const addProduct = async (req, res) => {
       title: name,
       description,
       price,
-      stock,
       category
     })
 

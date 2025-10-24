@@ -21,10 +21,6 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    category: {
-        type: String,
-        required: true,
-    },
     active: {
         type: Boolean,
         required: true,
