@@ -30,7 +30,7 @@ const App = () => {
           </SecurityRoutes>}>
           </Route>
 
-          <Route path="/add-product" element={<SecurityRoutes>
+          <Route path="/agregar-producto" element={<SecurityRoutes>
             <AddProduct/>
           </SecurityRoutes>}>
           </Route>

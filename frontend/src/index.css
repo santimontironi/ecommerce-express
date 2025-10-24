@@ -7,3 +7,7 @@
 .containerAdmin{
     background: linear-gradient(to right,#101010,#101010,#5E5E5E,#5E5E5E);
 }
+
+.containerAddProduct{
+    background: linear-gradient(to right,#5E5E5E,#5E5E5E,#101010,#101010);
+}
