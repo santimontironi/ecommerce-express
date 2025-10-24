@@ -47,8 +47,8 @@ export const loginAdmin = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === 'production', //es true cuando estamos en https, en desarollo es http
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 86400000
     });
 

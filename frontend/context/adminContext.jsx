@@ -6,7 +6,7 @@ export const AdminContext = createContext();
 
 export const AdminProvider = () => {
     const [admin, setAdmin] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState([]);
     const [correct, setCorrect] = useState(false);
 
@@ -29,11 +29,10 @@ export const AdminProvider = () => {
     useEffect(() => {
         const getAdmin = async () => {
             try {
-                setLoading(true);
                 const res = await dashboardAdminApi();
+                console.log(res.data)
                 if (res.data.authenticated === false) {
                     setAdmin(null)
-                    return
                 }
                 setAdmin(res.data.admin);
                 return res.data;
@@ -43,7 +42,7 @@ export const AdminProvider = () => {
             } finally {
                 setTimeout(() => {
                     setLoading(false);
-                }, 1500)
+                }, 2000)
             }
         };
         getAdmin();

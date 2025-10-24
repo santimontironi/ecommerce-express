@@ -3,11 +3,14 @@ import axios from "axios";
 const urlApi = import.meta.env.VITE_API_URL;
 
 export const loginAdminApi = (data) => {
-    return axios.post(`${urlApi}/login-admin`, data);
+    return axios.post(`${urlApi}/login-admin`, data,{
+        withCredentials: true
+    });
 }
 
 export const addProductApi = (data) => {
     return axios.post(`${urlApi}/add-product`, data, {
+        withCredentials: true,
         headers: {
             "Content-Type": "multipart/form-data",
         },
@@ -21,7 +24,9 @@ export const dashboardAdminApi = () => {
 }
 
 export const getAllProductsAdminApi = () => {
-    return axios.get(`${urlApi}/admin-productos`);
+    return axios.get(`${urlApi}/admin-productos`,{
+        withCredentials: true
+    });
 }
 
 export const getProductByIdApi = (id) => {
