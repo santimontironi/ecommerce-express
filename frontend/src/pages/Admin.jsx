@@ -9,7 +9,7 @@ const Admin = () => {
   const { products, loading } = useContext(AdminContext)
 
   return (
-    <div className="min-h-screen w-full containerAdmin flex flex-col items-center justify-center">
+    <div className="min-h-screen w-full containerAdmin flex flex-col items-center justify-center py-10">
 
       {loading ? <Loader /> : (
         <>
