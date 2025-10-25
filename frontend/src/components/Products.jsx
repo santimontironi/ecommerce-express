@@ -3,7 +3,7 @@ import Product from "./Product"
 const Products = ({ products }) => {
 
     return (
-        <div className="w-full">
+        <div className="w-full min-h-auto">
             <div className="xl:grid xl:grid-cols-3 xl:w-[1100px] xl:m-auto xl:gap-5 place-content-center justify-center items-stretch">
 
                 {products?.map((product) => (

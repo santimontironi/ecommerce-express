@@ -8,7 +8,6 @@ export const AdminProvider = () => {
     const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState([]);
-    const [correct, setCorrect] = useState(false);
 
     const signInAdmin = async (data) => {
         try {
@@ -30,7 +29,6 @@ export const AdminProvider = () => {
         const getAdmin = async () => {
             try {
                 const res = await dashboardAdminApi();
-                console.log(res.data)
                 if (res.data.authenticated === false) {
                     setAdmin(null)
                 }
@@ -64,26 +62,16 @@ export const AdminProvider = () => {
 
     const addProduct = async (data) => {
         try {
-            setLoading(true);
             const res = await addProductApi(data);
-            setCorrect(true);
-
-            setTimeout(() => {
-                setCorrect(false);
-            },2000)
-            
+            console.log("ESTO SE AGREGA: ",res.data)
             return res.data;
         } catch (error) {
             throw error;
-        } finally {
-            setTimeout(() => {
-                setLoading(false);
-            }, 1500)
         }
     };
 
     return (
-        <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct, correct }}>
+        <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct }}>
             <Outlet />
         </AdminContext.Provider>
     );

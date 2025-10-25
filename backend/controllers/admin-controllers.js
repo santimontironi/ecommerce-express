@@ -109,14 +109,14 @@ export const logoutAdmin = async (req, res) => {
 export const addProduct = async (req, res) => {
   try {
     const { name, description, price, stock } = req.body
-    const { image } = req.file
+    const image  = req.file?.filename
 
     const product = new Product({
       image,
-      title: name,
+      name,
       description,
       price,
-      category
+      stock
     })
 
     await product.save()
