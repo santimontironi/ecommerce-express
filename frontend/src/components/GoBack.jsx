@@ -6,7 +6,7 @@ const GoBack = ({ url }) => {
 
     return (
         <div className="absolute top-10 left-10 text-white text-2xl">
-            <button onClick={() => navigate(url)}><i className="bi bi-arrow-left"></i> Volver</button>
+            <button className="cursor-pointer" onClick={() => navigate(url)}><i className="bi bi-arrow-left"></i> Volver</button>
         </div>
     )
 }

@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { AdminContext } from "../../context/adminContext";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import GoBack from "../components/GoBack";
 
 const AdminLogin = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -33,6 +34,8 @@ const AdminLogin = () => {
 
   return (
     <div className="containerAdminLogin h-screen flex flex-col items-center justify-center px-4">
+
+      <GoBack url="/" />
 
       {loading ? <Loader /> :
         <form

@@ -6,7 +6,7 @@ import Loader from "../components/Loader"
 
 const Admin = () => {
 
-  const { products, loading } = useContext(AdminContext)
+  const { products, loading, logoutAdmin } = useContext(AdminContext)
 
   return (
     <div className="min-h-screen w-full containerAdmin flex flex-col items-center justify-center py-10">
@@ -19,7 +19,7 @@ const Admin = () => {
             lg:w-[800px] lg:h-[520px]
             xl:w-[960px] xl:h-[560px]
             2xl:w-[1100px] 2xl:h-[600px]
-            rounded-2xl p-6 shadow-[5px_5px_20px_rgba(0,0,0,0.8)]">
+            rounded-2xl p-6 shadow-[5px_5px_20px_rgba(0,0,0,0.8)] relative">
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl text-gray-800 mb-8 font-bold">
               Panel de administrador
@@ -34,6 +34,14 @@ const Admin = () => {
             hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">
               Agregar producto
             </Link>
+
+            <Link to="/">
+              <button onClick={() => logoutAdmin()} className="bg-red-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl 
+              hover:bg-red-700 active:scale-95 transition-transform duration-200 cursor-pointer mt-5 absolute bottom-3 right-10">
+                Cerrar sesión
+              </button>
+            </Link>
+
           </div>
 
           {products?.length === 0 ? (<h1 className="text-2xl sm:text-3xl md:text-4xl text-white mt-15 bg-red-500 p-5 rounded-2xl font-bold">No hay productos agregados</h1>) : (
@@ -42,13 +50,7 @@ const Admin = () => {
           
         </>
 
-        
-
       )}
-
-
-
-
 
     </div>
   )

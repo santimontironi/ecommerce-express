@@ -1,5 +1,4 @@
 import Admin from "../models/admin.js"
-import Product from "../models/products.js"
 import bcrypt from "bcrypt"
 import dotenv from "dotenv"
 import jwt from 'jsonwebtoken'
@@ -72,59 +71,16 @@ export const dashboardAdmin = async (req,res) => {
   }
 }
 
-export const getAllProducts = async (req,res) => {
-  try{
-    const products = await Product.find({active:true})
-    return res.status(200).json({products})
-  }
-  catch(error){
-    return res.status(500).json({ message: "Error interno del servidor" });
-  }
-}
-
-export const deleteProduct = async (req, res) => {
-  try {
-    const { productId } = req.params;
-
-    const product = await Product.findByIdAndUpdate(
-      productId,
-      { active: false }
-    );
-
-    if (!product) {
-      return res.status(404).json({ message: "Producto no encontrado" });
-    }
-
-    return res.status(200).json({ message: "Producto desactivado exitosamente", product });
-  } catch (error) {
-    return res.status(500).json({ message: "Error interno del servidor" });
-  }
-};
-
 export const logoutAdmin = async (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
   return res.status(200).json({ message: "Cierre de sesión exitoso" });
 };
 
-export const addProduct = async (req, res) => {
-  try {
-    const { name, description, price, stock } = req.body
-    const image  = req.file?.filename
 
-    const product = new Product({
-      image,
-      name,
-      description,
-      price,
-      stock
-    })
-
-    await product.save()
-  }
-  catch (error) {
-    return res.json({ message: 'Error al agregar un producto', error: error.message })
-  }
-}
 
 
 

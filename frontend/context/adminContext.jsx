@@ -1,10 +1,9 @@
 import { createContext, useState, useEffect } from "react";
-import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi, deleteProductApi } from "../api/api";
-import { Outlet } from "react-router-dom";
+import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi, deleteProductApi, logoutAdminApi } from "../api/api";
 
 export const AdminContext = createContext();
 
-export const AdminProvider = () => {
+export const AdminProvider = ({children}) => {
     const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState([]);
@@ -79,9 +78,19 @@ export const AdminProvider = () => {
         }
     };
 
+    const logoutAdmin = async () => {
+        try {
+            const res = await logoutAdminApi();
+            setAdmin(null);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     return (
-        <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct, deleteProduct, setProducts }}>
-            <Outlet />
+        <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct, deleteProduct, setProducts, logoutAdmin }}>
+            {children}
         </AdminContext.Provider>
     );
 };

@@ -39,6 +39,16 @@ export const deleteProductApi = (productId) => {
     });
 }
 
+export const logoutAdminApi = () => {
+    return axios.get(`${urlApi}/logout-admin`,{
+        withCredentials: true
+    });
+}
+
+export const products = () => {
+    return axios.get(`${urlApi}/productos`);
+}
+
 export const preferenceApi = (data) => {
     return axios.post(`${urlApi}/create-preference`, data);
 }

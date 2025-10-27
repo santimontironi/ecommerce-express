@@ -1,7 +1,7 @@
 import express from "express";
 import { router as preferenceRouter } from "./routes/preference-routes.js";
 import { router as adminRouter } from "./routes/admin-routes.js";
-import {router as userRouter} from "./routes/user-routes.js"
+import {router as productsRouter} from "./routes/product-routes.js";
 import connectDB from "./bd/bd.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -24,7 +24,7 @@ connectDB();
 
 app.use('', preferenceRouter);
 app.use('', adminRouter);
-app.use('', userRouter);
+app.use('', productsRouter);
 
 const __filename = fileURLToPath(import.meta.url); 
 // Convierte la URL del módulo actual en la ruta de archivo completa

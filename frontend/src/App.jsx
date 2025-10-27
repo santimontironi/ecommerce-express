@@ -8,11 +8,14 @@ import Admin from "./pages/Admin";
 import AddProduct from "./pages/AddProduct";
 import { AdminProvider } from "../context/adminContext";
 import SecurityRoutes from "./components/SecurityRoutes";
+import { UserProvider } from "../context/UserContext";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+
+        
         <Route path="/" element={<Layout />} />
 
 
