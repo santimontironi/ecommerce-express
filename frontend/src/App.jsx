@@ -6,6 +6,7 @@ import Layout from "../layout/Layout";
 import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
 import AddProduct from "./pages/AddProduct";
+import ProductsPage from "./pages/ProductsPage";
 import { AdminProvider } from "../context/adminContext";
 import SecurityRoutes from "./components/SecurityRoutes";
 import { UserProvider } from "../context/UserContext";
@@ -15,7 +16,6 @@ const App = () => {
     <BrowserRouter>
       <Routes>
 
-        
         <Route path="/" element={<Layout />} />
 
 
@@ -38,6 +38,10 @@ const App = () => {
           </SecurityRoutes>}>
           </Route>
 
+        </Route>
+
+        <Route element={<UserProvider/>}>
+          <Route path="/productos" element={<ProductsPage/>} />
         </Route>
 
       </Routes>

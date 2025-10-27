@@ -1,9 +1,10 @@
 import { createContext, useState, useEffect } from "react";
 import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi, deleteProductApi, logoutAdminApi } from "../api/api";
+import { Outlet } from "react-router-dom";
 
 export const AdminContext = createContext();
 
-export const AdminProvider = ({children}) => {
+export const AdminProvider = () => {
     const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState([]);
@@ -90,7 +91,7 @@ export const AdminProvider = ({children}) => {
 
     return (
         <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct, deleteProduct, setProducts, logoutAdmin }}>
-            {children}
+            <Outlet/>
         </AdminContext.Provider>
     );
 };
