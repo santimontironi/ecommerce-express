@@ -33,6 +33,12 @@ export const getProductByIdApi = (id) => {
     return axios.get(`${urlApi}/producto/${id}`);
 }
 
+export const deleteProductApi = (productId) => {
+    return axios.delete(`${urlApi}/delete-product/${productId}`, {
+        withCredentials: true
+    });
+}
+
 export const preferenceApi = (data) => {
     return axios.post(`${urlApi}/create-preference`, data);
 }

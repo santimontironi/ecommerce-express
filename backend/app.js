@@ -26,10 +26,13 @@ app.use('', preferenceRouter);
 app.use('', adminRouter);
 app.use('', userRouter);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url); 
+// Convierte la URL del módulo actual en la ruta de archivo completa
 
-// Servir la carpeta uploads
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+const __dirname = path.dirname(__filename); 
+// Obtiene la carpeta donde se encuentra este archivo
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
+// Sirve los archivos de la carpeta "uploads" de forma pública en la ruta /uploads
 
 export default app;

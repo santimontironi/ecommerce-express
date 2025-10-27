@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi } from "../api/api";
+import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi, deleteProductApi } from "../api/api";
 import { Outlet } from "react-router-dom";
 
 export const AdminContext = createContext();
@@ -70,8 +70,17 @@ export const AdminProvider = () => {
         }
     };
 
+    const deleteProduct = async (productId) => {
+        try {
+            const res = await deleteProductApi(productId);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     return (
-        <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct }}>
+        <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct, deleteProduct, setProducts }}>
             <Outlet />
         </AdminContext.Provider>
     );
