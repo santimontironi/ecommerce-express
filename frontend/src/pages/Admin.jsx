@@ -36,7 +36,7 @@ const Admin = () => {
             </Link>
           </div>
 
-          {products?.length === 0 ? (<h1 className="text-2xl sm:text-3xl md:text-4xl text-gray-800 mb-8 font-bold">No hay productos</h1>) : (
+          {products?.length === 0 ? (<h1 className="text-2xl sm:text-3xl md:text-4xl text-white mt-15 bg-red-500 p-5 rounded-2xl font-bold">No hay productos agregados</h1>) : (
             <Products products={products} />
           ) }
           
