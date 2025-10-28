@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom"
 import { useContext } from "react"
 import { AdminContext } from "../../context/adminContext"
-import Products from "../components/Products"
+import ProductsAdmin from "./ProductsAdmin"
 import Loader from "../components/Loader"
 
 const Admin = () => {
 
-  const { products, loading, logoutAdmin } = useContext(AdminContext)
+  const { dashboardLoading, logoutAdmin, products } = useContext(AdminContext)
 
   return (
     <div className="min-h-screen w-full containerAdmin flex flex-col items-center justify-center py-10">
 
-      {loading ? <Loader /> : (
+      {dashboardLoading ? <Loader /> : (
         <>
           <div className="flex flex-col items-center justify-center bg-gray-300 text-center mx-auto
             w-[320px] h-[400px]
@@ -30,24 +30,28 @@ const Admin = () => {
               actualizada la información de tu tienda.
             </p>
 
-            <Link to="/agregar-producto" className="bg-blue-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl 
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+              <Link to="/agregar-producto" className="bg-blue-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl 
             hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">
-              Agregar producto
-            </Link>
+                Agregar producto
+              </Link>
 
-            <Link to="/">
-              <button onClick={() => logoutAdmin()} className="bg-red-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl 
-              hover:bg-red-700 active:scale-95 transition-transform duration-200 cursor-pointer mt-5 absolute bottom-3 right-10">
-                Cerrar sesión
-              </button>
-            </Link>
+              <Link to="/">
+                <button onClick={() => logoutAdmin()} className="bg-red-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl 
+              hover:bg-red-700 active:scale-95 transition-transform duration-200 cursor-pointer">
+                  Cerrar sesión
+                </button>
+              </Link>
+            </div>
 
           </div>
 
-          {products?.length === 0 ? (<h1 className="text-2xl sm:text-3xl md:text-4xl text-white mt-15 bg-red-500 p-5 rounded-2xl font-bold">No hay productos agregados</h1>) : (
-            <Products products={products} />
-          ) }
-          
+
+          {products.length === 0 ? <h3 className="text-2xl sm:text-3xl md:text-4xl text-white bg-red-500 p-4 mt-8 font-bold rounded-xl">No hay productos agregados aún</h3> : (
+            <ProductsAdmin />
+          )}
+
+
         </>
 
       )}

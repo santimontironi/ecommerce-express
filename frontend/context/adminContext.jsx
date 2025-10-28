@@ -6,12 +6,13 @@ export const AdminContext = createContext();
 
 export const AdminProvider = () => {
     const [admin, setAdmin] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loginLoading, setLoginLoading] = useState(false);
+    const [dashboardLoading, setDashboardLoading] = useState(true);
     const [products, setProducts] = useState([]);
 
     const signInAdmin = async (data) => {
         try {
-            setLoading(true);
+            setLoginLoading(true);
             const res = await loginAdminApi(data);
             setAdmin(res.data.admin);
             return res.data;
@@ -20,8 +21,8 @@ export const AdminProvider = () => {
             throw error;
         } finally {
             setTimeout(() => {
-                setLoading(false);
-            }, 1500)
+                setLoginLoading(false);
+            }, 5000)
         }
     };
 
@@ -39,7 +40,7 @@ export const AdminProvider = () => {
                 throw error;
             } finally {
                 setTimeout(() => {
-                    setLoading(false);
+                    setDashboardLoading(false);
                 }, 2000)
             }
         };
@@ -50,8 +51,9 @@ export const AdminProvider = () => {
     useEffect(() => {
         const getAllProducts = async () => {
             try {
+                
                 const res = await getAllProductsAdminApi();
-                setProducts(res.data.products);
+                setProducts(res.data.products || []);
             } catch (error) {
                 throw error;
             }
@@ -63,7 +65,6 @@ export const AdminProvider = () => {
     const addProduct = async (data) => {
         try {
             const res = await addProductApi(data);
-            console.log("ESTO SE AGREGA: ",res.data)
             return res.data;
         } catch (error) {
             throw error;
@@ -90,8 +91,18 @@ export const AdminProvider = () => {
     };
 
     return (
-        <AdminContext.Provider value={{ admin, signInAdmin, loading, products, addProduct, deleteProduct, setProducts, logoutAdmin }}>
-            <Outlet/>
+        <AdminContext.Provider value={{ 
+            admin, 
+            signInAdmin, 
+            loginLoading, 
+            dashboardLoading,
+            products, 
+            addProduct, 
+            deleteProduct, 
+            setProducts, 
+            logoutAdmin 
+        }}>
+            <Outlet />
         </AdminContext.Provider>
     );
 };

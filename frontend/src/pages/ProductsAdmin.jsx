@@ -1,11 +1,11 @@
-import Product from "./Product"
+import Product from "../components/Product"
 import { AdminContext } from "../../context/adminContext"
 import { useContext } from "react"
 import Swal from "sweetalert2";
 
-const Products = ({ products }) => {
+const ProductsAdmin = () => {
 
-    const { admin, deleteProduct, setProducts } = useContext(AdminContext)
+    const { products, admin, deleteProduct, setProducts } = useContext(AdminContext)
 
     const handleDelete = async (id) => {
        
@@ -50,7 +50,7 @@ const Products = ({ products }) => {
         <div className="w-full mt-10">
             <div className="flex flex-col gap-5 md:grid md:grid-cols-2 xl:grid xl:grid-cols-3 xl:w-[1100px] xl:m-auto xl:gap-15">
 
-                {products?.map((product) => (
+                {products.map((product) => (
                     <div key={product._id}>
                         <Product
                             id={product._id}
@@ -70,4 +70,4 @@ const Products = ({ products }) => {
     )
 }
 
-export default Products
+export default ProductsAdmin

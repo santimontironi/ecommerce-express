@@ -3,12 +3,12 @@ import { useContext } from "react";
 import { AdminContext } from "../../context/adminContext"
 import Loader from "./Loader";
 
-const SecurityRoutes = ({ children }) => {
+const SecurityRoutes = ({children}) => {
 
-  const { admin, loading } = useContext(AdminContext)
+  const { admin, dashboardLoading } = useContext(AdminContext)
 
   // Si todavía está verificando, no redirigir
-  if (loading) {
+  if (dashboardLoading) {
     return <Loader />
   }
 
@@ -19,7 +19,9 @@ const SecurityRoutes = ({ children }) => {
 
   // Si hay administrador, mostrar el contenido
   return (
-    children
+    <>
+      {children}
+    </>
   )
 }
 

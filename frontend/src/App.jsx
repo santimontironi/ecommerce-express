@@ -7,6 +7,8 @@ import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
 import AddProduct from "./pages/AddProduct";
 import ProductsPage from "./pages/ProductsPage";
+import ProductById from "./pages/ProductById";
+import ProductsAdmin from "./pages/ProductsAdmin";
 import { AdminProvider } from "../context/adminContext";
 import SecurityRoutes from "./components/SecurityRoutes";
 import { UserProvider } from "../context/UserContext";
@@ -30,18 +32,24 @@ const App = () => {
 
           <Route path="/admin" element={<SecurityRoutes>
             <Admin />
-          </SecurityRoutes>}>
-          </Route>
+          </SecurityRoutes>}/>
 
+        
           <Route path="/agregar-producto" element={<SecurityRoutes>
-            <AddProduct/>
-          </SecurityRoutes>}>
-          </Route>
+            <AddProduct />
+          </SecurityRoutes>}/>
+          
+
+          <Route path="/admin-productos" element={<SecurityRoutes>
+            <ProductsAdmin />
+          </SecurityRoutes>}/>
+         
 
         </Route>
 
-        <Route element={<UserProvider/>}>
-          <Route path="/productos" element={<ProductsPage/>} />
+        <Route element={<UserProvider />}>
+          <Route path="/productos" element={<ProductsPage />} />
+          <Route path="/producto/:productId" element={<ProductById />} />
         </Route>
 
       </Routes>
