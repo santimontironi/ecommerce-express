@@ -17,12 +17,14 @@ body {
 }
 
 .containerHome {
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.726), transparent 80%),
-              linear-gradient(to right, #3b3b3b, #101010, #3b3b3b);
+  background: linear-gradient(to right, #101010, #3b3b3b, #101010);
 }
 
 
 @media screen and (max-width:678px){
+    nav{
+        background: linear-gradient(100deg,#101010,#3b3b3b);
+    }
     .navOpen{
         box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7);
     }

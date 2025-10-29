@@ -1,8 +1,9 @@
 import logo from '../img/logo.jpg'
+import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
-    <div className="w-full h-screen containerHome flex flex-col items-center justify-center text-center text-white gap-4">
+    <div className="w-full h-screen containerHome flex flex-col items-center justify-center text-center text-white gap-4 mt-7">
       <img src={logo} alt="Logo" className="w-40 mb-6 rounded-2xl shadow-[10px_15px_10px_rgba(0,0,0,0.8)]" />
       <h1 className="text-4xl font-bold mb-4 text-shadow-[5px_5px_10px_rgba(0,0,0,0.8)]">
         Bienvenidos a Nuno Deportes
@@ -12,6 +13,10 @@ const Home = () => {
         indumentaria deportiva de primera calidad. Trabajamos con atención personalizada para que elijas el producto 
         perfecto según tus objetivos. ¡Equipate con nosotros y llevá tu entrenamiento al siguiente nivel!
       </p>
+      <div className='flex flex-col md:flex-row gap-5 items-center justify-center'>
+        <Link to={"/productos"} className="bg-blue-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">Ver nuestros productos</Link>
+        <Link to={"/contacto"} className="bg-white text-black font-medium text-base sm:text-lg py-3 px-8 rounded-xl hover:bg-[#ececec] active:scale-95 transition-transform duration-200 cursor-pointer">Contáctate con nosotros</Link>
+      </div>
     </div>
   )
 }
