@@ -40,7 +40,7 @@ export const deleteProductApi = (productId) => {
 }
 
 export const logoutAdminApi = () => {
-    return axios.post(`${urlApi}/logout-admin`,{
+    return axios.post(`${urlApi}/logout-admin`, {} ,{
         withCredentials: true
     });
 }
