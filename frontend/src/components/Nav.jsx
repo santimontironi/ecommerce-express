@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import logo from '../img/logo.jpg'
 
 const Nav = () => {
 
@@ -11,33 +12,33 @@ const Nav = () => {
 
   return (
 
-    <>
-      <button className="text-black text-3xl md:hidden mb-4 mt-7 ml-7" onClick={handleOpen}>
+    <header className="fixed top-0 left-0 w-full h-[100px] md:h-[120px] bg-linear-to-b from-black to-blue-950 flex items-center justify-between p-15">
+
+      <Link to="/">
+        <img className="w-[70px] rounded-2xl" src={logo} alt="logo" />
+      </Link>
+
+      <button className="text-white text-3xl md:hidden" onClick={handleOpen}>
         <i className="bi bi-list"></i>
       </button>
 
-      <header className={` ${open ? "transform transition duration-500 ease-in-out translate-x-0 shadow-[10px_5px_10px_rgba(0,0,0,0.8)]" : " transform transition duration-500 ease-in-out -translate-x-full"} fixed top-0 left-0 h-screen w-[140px] bg-linear-to-b from-black to-blue-950 flex flex-col items-center py-10 md:translate-x-0 md:w-full md:h-[100px] md:flex-row md:justify-between md:p-[40px] md:py-0`}>
+      <nav className={`fixed top-0 right-0 h-screen w-[140px] bg-linear-to-b from-black to-blue-950 flex flex-col items-center py-10 
+                    transform transition-transform duration-500 ease-in-out
+                    ${open ? "translate-x-0 navOpen" : "translate-x-full"}
+                    md:static md:flex md:flex-row md:h-auto md:w-auto md:translate-x-0 md:py-0`}>
+        <ul className="flex flex-col items-center justify-center gap-5 absolute top-[30%] xl:static md:flex-row md:gap-8 text-white">
+          <button className="text-white text-3xl md:hidden" onClick={handleOpen}>
+            <i className="bi bi-x"></i>
+          </button>
+          <li><Link className="no-underline" to="/">Inicio</Link></li>
+          <li><Link className="no-underline" to="/nosotros">Nosotros</Link></li>
+          <li><Link className="no-underline" to="/productos">Productos</Link></li>
+          <li><Link className="no-underline" to="/contacto">Contacto</Link></li>
+          <li><Link className="no-underline" to="/admin-login">Administrador</Link></li>
+        </ul>
+      </nav>
 
-        <button className="text-white text-3xl md:hidden mb-4" onClick={handleOpen}>
-          <i className="bi bi-x"></i>
-        </button>
-
-        <Link to="/">
-          <h1 className="text-white text-center">Logo</h1>
-        </Link>
-
-        <nav className="flex-1 flex flex-col justify-center md:flex-0">
-          <ul className="text-white flex flex-col items-center gap-[20px] md:flex-row">
-            <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/nosotros">Nosotros</Link></li>
-            <li><Link to="/productos">Productos</Link></li>
-            <li><Link to="/contacto">Contacto</Link></li>
-            <li><Link to="/admin-login">Administrador</Link></li>
-          </ul>
-        </nav>
-
-      </header>
-    </>
+    </header>
 
 
 

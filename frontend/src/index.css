@@ -15,3 +15,15 @@ body {
 .containerAddProduct{
     background: linear-gradient(to right,#5E5E5E,#5E5E5E,#101010,#101010);
 }
+
+.containerHome {
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.726), transparent 80%),
+              linear-gradient(to right, #3b3b3b, #101010, #3b3b3b);
+}
+
+
+@media screen and (max-width:678px){
+    .navOpen{
+        box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7);
+    }
+}

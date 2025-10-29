@@ -40,7 +40,6 @@ const Checkout = () => {
               productImage={product.imagen}
               productDescription={product.descripcion}
               productStock={product.stock}
-              productCategory={product.categoria}
             />}
         </div>
 

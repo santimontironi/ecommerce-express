@@ -51,9 +51,8 @@ export const AdminProvider = () => {
     useEffect(() => {
         const getAllProducts = async () => {
             try {
-                
                 const res = await getAllProductsAdminApi();
-                setProducts(res.data.products || []);
+                setProducts(res.data.products);
             } catch (error) {
                 throw error;
             }
