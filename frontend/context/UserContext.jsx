@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { products } from "../api/api";
+import { products, getProductByIdApi } from "../api/api";
 import { Outlet } from "react-router-dom";
 
 export const UserContext = createContext();
@@ -16,21 +16,46 @@ export const UserProvider = () => {
     const [productById, setProductById] = useState({});
 
     useEffect(() => {
-        setTimeout(() => {
-            setAllProducts(products);
-            setLoading(false);
-        }, 1500)
-    }, [products])
+        async function getAllProducts() {
+            try{
+                const res = await products();
+                setAllProducts(res.data.products);
+            }
+            catch(error){
+                setAllProducts([]);
+                throw error
+            }
+            finally{
+                setTimeout(() => {
+                    setLoading(false);
+                },1500)
+            }
+        }
+        getAllProducts()
+    }, [])
 
     useEffect(() => {
-        setTimeout(() => {
-            const product = allProducts.find((product) => product.id === parseInt(id));
-            setProductById(product)
-            setLoading(false)
-        }, 1500)
+        async function getProduct(){
+            try{
+                const res = await getProductByIdApi(id);
+                setProductById(res.data.product);
+            }
+            catch(error){
+                setProductById({});
+                throw error
+            }
+            finally{
+                setTimeout(() => {
+                    setLoading(false);
+                },1500)
+            }
+        }
+
+        getProduct()
+
     }, [id])
 
-    return <UserContext.Provider value={{ loading, allProducts, productById }}>
+    return <UserContext.Provider value={{ allProducts, loading, productById }}>
         <Outlet />
     </UserContext.Provider>;
 }
