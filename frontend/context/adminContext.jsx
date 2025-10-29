@@ -8,7 +8,6 @@ export const AdminProvider = () => {
     const [admin, setAdmin] = useState(null);
     const [loginLoading, setLoginLoading] = useState(false);
     const [dashboardLoading, setDashboardLoading] = useState(true);
-    const [productLoading, setProductLoading] = useState(true);
     const [products, setProducts] = useState([]);
 
     const signInAdmin = async (data) => {
@@ -52,16 +51,10 @@ export const AdminProvider = () => {
     useEffect(() => {
         const getAllProducts = async () => {
             try {
-                setProductLoading(true);
                 const res = await getAllProductsAdminApi();
                 setProducts(res.data.products);
             } catch (error) {
                 throw error;
-            }
-            finally {
-                setTimeout(() => {
-                    setProductLoading(false);
-                }, 2000)
             }
         };
         getAllProducts();
@@ -71,6 +64,9 @@ export const AdminProvider = () => {
     const addProduct = async (data) => {
         try {
             const res = await addProductApi(data);
+            if (res.data.product) {
+                setProducts((prev) => [...prev, res.data.product]);
+            }
             return res.data;
         } catch (error) {
             throw error;
@@ -97,16 +93,16 @@ export const AdminProvider = () => {
     };
 
     return (
-        <AdminContext.Provider value={{ 
-            admin, 
-            signInAdmin, 
-            loginLoading, 
+        <AdminContext.Provider value={{
+            admin,
+            signInAdmin,
+            loginLoading,
             dashboardLoading,
-            products, 
-            addProduct, 
-            deleteProduct, 
-            setProducts, 
-            logoutAdmin 
+            products,
+            addProduct,
+            deleteProduct,
+            setProducts,
+            logoutAdmin
         }}>
             <Outlet />
         </AdminContext.Provider>

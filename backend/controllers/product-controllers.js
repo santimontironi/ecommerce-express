@@ -35,6 +35,8 @@ export const addProduct = async (req, res) => {
     })
 
     await product.save()
+
+    return res.json({ message: 'Producto agregado exitosamente', product })
   }
   catch (error) {
     return res.json({ message: 'Error al agregar un producto', error: error.message })

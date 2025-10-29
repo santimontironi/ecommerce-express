@@ -11,7 +11,8 @@ import ProductById from "./pages/ProductById";
 import ProductsAdmin from "./pages/ProductsAdmin";
 import { AdminProvider } from "../context/adminContext";
 import SecurityRoutes from "./components/SecurityRoutes";
-import { UserProvider } from "../context/UserContext";
+import { AllProductsProvider } from "../context/AllProductsContext";
+import { ProductByIdProvider } from "../context/ProductByIdContext";
 
 const App = () => {
   return (
@@ -44,11 +45,13 @@ const App = () => {
             <ProductsAdmin />
           </SecurityRoutes>}/>
          
-
         </Route>
 
-        <Route element={<UserProvider />}>
+        <Route element={<AllProductsProvider />}>
           <Route path="/productos" element={<ProductsPage />} />
+        </Route>
+
+        <Route element={<ProductByIdProvider />}>
           <Route path="/producto/:productId" element={<ProductById />} />
         </Route>
 

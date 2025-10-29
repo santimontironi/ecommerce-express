@@ -47,7 +47,7 @@ const Admin = () => {
           </div>
 
 
-          {products?.length === 0 ? <h3 className="text-2xl sm:text-3xl md:text-4xl text-white bg-red-500 p-4 mt-8 font-bold rounded-xl">No hay productos agregados aún</h3> : (
+          {products?.length === 0 || !products ? <h3 className="text-2xl sm:text-3xl md:text-4xl text-white bg-red-500 p-4 mt-8 font-bold rounded-xl">No hay productos agregados aún</h3> : (
             <ProductsAdmin />
           )}
 
