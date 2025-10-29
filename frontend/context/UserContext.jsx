@@ -9,7 +9,7 @@ export const UserProvider = () => {
 
     const { id } = useParams();
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [allProducts, setAllProducts] = useState([]);
 
@@ -17,6 +17,7 @@ export const UserProvider = () => {
 
     useEffect(() => {
         async function getAllProducts() {
+            setLoading(true);
             try{
                 const res = await products();
                 setAllProducts(res.data.products);
@@ -36,6 +37,7 @@ export const UserProvider = () => {
 
     useEffect(() => {
         async function getProduct(){
+            setLoading(true);
             try{
                 const res = await getProductByIdApi(id);
                 setProductById(res.data.product);

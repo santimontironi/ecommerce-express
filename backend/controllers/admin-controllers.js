@@ -59,25 +59,32 @@ export const loginAdmin = async (req, res) => {
   }
 };
 
-export const dashboardAdmin = async (req,res) => {
-  try{
+export const dashboardAdmin = async (req, res) => {
+  try {
     const adminId = req.adminId
     const admin = await Admin.findById(adminId)
 
-    return res.status(200).json({authenticated: true, admin})
+    return res.status(200).json({ authenticated: true, admin })
   }
-  catch(error){
+  catch (error) {
     return res.status(500).json({ message: "Error interno del servidor" });
   }
 }
 
 export const logoutAdmin = async (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-  });
-  return res.status(200).json({ message: "Cierre de sesión exitoso" });
+  try {
+    res.clearCookie("token",{
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/"
+    })
+    return res.status(200).json({ message: "Cierre de sesión exitoso" });
+  }
+  catch (error) {
+    return res.status(500).json({ message: "Error interno del servidor", error: error.message });
+  }
+
 };
 
 

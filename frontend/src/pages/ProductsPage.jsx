@@ -12,7 +12,7 @@ const ProductsPage = () => {
       {loading ? <h1>Cargando...</h1> : (
 
         allProducts.length === 0 ? <h1>No hay productos</h1> : (
-          <div className="grid grid-cols-3">
+          <div className="flex flex-col items-center justify-center md:grid md:grid-cols-2 xl:grid-cols-3 xl:w-[1000px]">
             {allProducts.map((item, index) => (
               <Product key={index} productName={item.name} productDescription={item.description} productPrice={item.price} productImage={item.image} productStock={item.stock} />
             ))}

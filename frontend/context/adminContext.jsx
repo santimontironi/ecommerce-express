@@ -8,6 +8,7 @@ export const AdminProvider = () => {
     const [admin, setAdmin] = useState(null);
     const [loginLoading, setLoginLoading] = useState(false);
     const [dashboardLoading, setDashboardLoading] = useState(true);
+    const [productLoading, setProductLoading] = useState(true);
     const [products, setProducts] = useState([]);
 
     const signInAdmin = async (data) => {
@@ -51,10 +52,16 @@ export const AdminProvider = () => {
     useEffect(() => {
         const getAllProducts = async () => {
             try {
+                setProductLoading(true);
                 const res = await getAllProductsAdminApi();
                 setProducts(res.data.products);
             } catch (error) {
                 throw error;
+            }
+            finally {
+                setTimeout(() => {
+                    setProductLoading(false);
+                }, 2000)
             }
         };
         getAllProducts();
