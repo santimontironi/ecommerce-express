@@ -25,7 +25,7 @@ export const AllProductsProvider = () => {
             finally{
                 setTimeout(() => {
                     setLoading(false);
-                },1500)
+                },2000)
             }
         }
         getAllProducts()

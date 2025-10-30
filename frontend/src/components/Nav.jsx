@@ -32,9 +32,9 @@ const Nav = () => {
           </button>
           <li><Link className="no-underline" to="/">Inicio</Link></li>
           <li><Link className="no-underline" to="/nosotros">Nosotros</Link></li>
-          <li><Link className="no-underline" to="/productos">Productos</Link></li>
           <li><Link className="no-underline" to="/contacto">Contacto</Link></li>
-          <li><Link className="no-underline" to="/admin-login">Administrador</Link></li>
+          <li><Link className="no-underline" target="_blank" to="/productos">Productos</Link></li>
+          <li><Link className="no-underline bg-white text-black p-3 rounded-xl hover:bg-black hover:text-white" to="/admin-login">Administrador</Link></li>
         </ul>
       </nav>
 

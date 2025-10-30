@@ -2,13 +2,14 @@ import Product from "../components/Product"
 import { AdminContext } from "../../context/adminContext"
 import { useContext } from "react"
 import Swal from "sweetalert2";
+import Loader from "../components/Loader";
 
 const ProductsAdmin = () => {
 
-    const { products, admin, deleteProduct, setProducts } = useContext(AdminContext)
+    const { products, admin, deleteProduct, setProducts, productsLoading } = useContext(AdminContext)
 
     const handleDelete = async (id) => {
-       
+
         const result = await Swal.fire({
             title: "¿Estás seguro de eliminar este producto?",
             text: "No podrás revertir esta acción",
@@ -26,7 +27,7 @@ const ProductsAdmin = () => {
                 const newProducts = products.filter((product) => product._id !== id)
                 setProducts(newProducts)
 
-                
+
                 Swal.fire({
                     title: "Eliminado",
                     text: "El producto fue eliminado correctamente",
@@ -50,20 +51,24 @@ const ProductsAdmin = () => {
         <div className="w-full mt-10">
             <div className="flex flex-col gap-5 md:grid md:grid-cols-2 xl:grid xl:grid-cols-3 xl:w-[1100px] xl:m-auto xl:gap-15">
 
-                {products?.map((product) => (
-                    <div key={product._id}>
-                        <Product
-                            id={product._id}
-                            admin={admin}
-                            productImage={product.image}
-                            productName={product.name}
-                            productPrice={product.price}
-                            productDescription={product.description}
-                            productStock={product.stock}
-                            handleDelete={handleDelete}
-                        />
-                    </div>
-                ))}
+                {productsLoading ? <Loader /> : (
+
+                    products?.map((product) => (
+                        <div key={product._id}>
+                            <Product
+                                id={product._id}
+                                admin={admin}
+                                productImage={product.image}
+                                productName={product.name}
+                                productPrice={product.price}
+                                productDescription={product.description}
+                                productStock={product.stock}
+                                handleDelete={handleDelete}
+                            />
+                        </div>
+                    ))
+                )}
+
 
             </div>
         </div>
