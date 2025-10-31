@@ -2,7 +2,7 @@ const Contact = () => {
   return (
     <div className="w-full min-h-screen bg-white flex justify-center items-center py-16 containerContact border-t border-[#ececec]">
       <div className="w-[90%] max-w-[700px] bg-[#2a2a2a] text-white rounded-2xl shadow-2xl p-10 border border-[#101010]">
-        <h2 className="text-center text-[32px] font-extrabold mb-8 border-b-2 border-gray-500 pb-2">
+        <h2 className="text-center text-[32px] font-extrabold mb-8 border-b-2 border-blue-600 pb-2">
           Contactanos
         </h2>
 
@@ -36,7 +36,7 @@ const Contact = () => {
 
           <button
             type="submit"
-            className="bg-black hover:bg-white hover:text-black active:scale-95 transition-all duration-500 text-white font-semibold py-3 rounded-lg mt-4 cursor-pointer"
+            className="bg-blue-800 hover:bg-blue-600 active:scale-95 transition-all duration-500 text-white font-semibold py-3 rounded-lg mt-4 cursor-pointer"
           >
             Enviar mensaje
           </button>

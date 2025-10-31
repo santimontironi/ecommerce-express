@@ -14,7 +14,7 @@ const Home = () => {
         perfecto según tus objetivos. ¡Equipate con nosotros y llevá tu entrenamiento al siguiente nivel!
       </p>
       <div className='flex flex-col md:flex-row gap-5 items-center justify-center'>
-        <Link to={"/productos"} className="bg-blue-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">Ver nuestros productos</Link>
+        <Link to={"/productos"} className="bg-blue-800 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">Ver nuestros productos</Link>
         <Link to={"/contacto"} className="bg-white text-black font-medium text-base sm:text-lg py-3 px-8 rounded-xl hover:bg-[#ececec] active:scale-95 transition-transform duration-200 cursor-pointer">Contáctate con nosotros</Link>
       </div>
     </div>

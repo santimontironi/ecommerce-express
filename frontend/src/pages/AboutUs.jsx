@@ -13,7 +13,7 @@ const AboutUs = () => {
                     <br />
 
                     Ya seas un atleta profesional, un amante del gimnasio o simplemente alguien que busca sentirse bien mientras entrena, tenemos la prenda ideal para vos. Nuestro objetivo es acompañarte en cada movimiento, con ropa que te inspire a superarte día a día. Porque no hay nada más auténtico que vestirte con algo hecho especialmente para vos.</p>
-                    <Link to={"/productos"} className="bg-blue-600 text-white font-medium text-base sm:text-lg p-3 rounded-xl hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer w-[250px] text-center mx-auto mt-5">Ver nuestros productos</Link>
+                    <Link to={"/productos"} className="bg-blue-800 text-white font-medium text-base sm:text-lg p-3 rounded-xl hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer w-[250px] text-center mx-auto mt-5">Ver nuestros productos</Link>
                 </div>
                 <img className="w-[270px] rounded-2xl md:w-[350px] xl:w-[450px]" src={logo} alt="" />
             </div>
