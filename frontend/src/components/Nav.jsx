@@ -15,7 +15,7 @@ const Nav = () => {
 
   return (
 
-    <header className="fixed top-0 left-0 w-full h-[100px] md:h-[120px] bg-linear-to-b from-white to-[#707070] flex items-center justify-between p-15">
+    <header className="fixed top-0 left-0 w-full h-[100px] md:h-[120px] bg-linear-to-b from-white to-[#c4bfbf] flex items-center justify-between p-15 border-b-3 border-blue-600 z-50">
 
       <Link to="/">
         <img className="w-[70px] rounded-2xl" src={logo} alt="logo" />

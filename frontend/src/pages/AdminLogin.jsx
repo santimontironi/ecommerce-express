@@ -42,7 +42,7 @@ const AdminLogin = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="bg-[#dbd8d8] shadow-[8px_8px_10px_rgba(0,0,0,0.8)] w-[300px] md:w-[400px] lg:w-[500px] xl:w-[600px] 2xl:w-[800px] rounded-2xl p-6 sm:p-8 md:p-10 flex flex-col gap-6"
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl text-center font-semibold text-black">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl text-center font-semibold text-black border-b-3 border-blue-600 pb-4">
             Ingreso de Administrador
           </h1>
 
@@ -54,7 +54,7 @@ const AdminLogin = () => {
               id="username"
               type="text"
               {...register("username", { required: "El usuario es obligatorio" })}
-              className="border border-black rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black transition-all"
+              className="border border-black rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
               placeholder="Ingresá tu usuario"
             />
             {errors.username && (
@@ -70,7 +70,7 @@ const AdminLogin = () => {
               id="password"
               type="password"
               {...register("password", { required: "La clave es obligatoria" })}
-              className="border border-black rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black transition-all"
+              className="border border-black rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
               placeholder="Ingresá tu clave"
             />
             {errors.password && (
@@ -80,7 +80,7 @@ const AdminLogin = () => {
 
           <button
             type="submit"
-            className="mt-4 bg-black text-white py-2 rounded-lg text-lg hover:bg-white hover:text-black border border-black transition-all duration-300 cursor-pointer"
+            className="mt-4 bg-blue-600 text-white py-2 rounded-lg text-lg hover:bg-blue-800 hover:text-white border border-black transition-all duration-300 cursor-pointer"
           >
             Ingresar
           </button>
