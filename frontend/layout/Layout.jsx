@@ -1,6 +1,7 @@
 import Home from "../src/pages/Home"
 import Nav from "../src/components/Nav"
 import AboutUs from "../src/pages/AboutUs"
+import Contact from "../src/pages/Contact"
 
 const Layout = () => {
   return (
@@ -8,6 +9,7 @@ const Layout = () => {
       <Nav />
       <Home />
       <AboutUs />
+      <Contact />
     </div>
   )
 }

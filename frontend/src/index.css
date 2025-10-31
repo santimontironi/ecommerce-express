@@ -27,7 +27,7 @@ body {
     background-attachment: fixed;
 }
 
-.containerAboutUs{
+.containerAboutUs, .containerContact{
     background: linear-gradient(to right, #101010, #3b3b3b, #101010);
 }
 
