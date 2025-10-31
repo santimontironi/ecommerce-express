@@ -27,6 +27,10 @@ body {
     background-attachment: fixed;
 }
 
+.containerAboutUs{
+    background: linear-gradient(to right, #101010, #3b3b3b, #101010);
+}
+
 
 @media screen and (max-width:678px){
     nav{
