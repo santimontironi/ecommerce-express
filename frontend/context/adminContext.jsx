@@ -51,6 +51,7 @@ export const AdminProvider = () => {
 
     useEffect(() => {
         const getAllProducts = async () => {
+            if(!admin) return
             setProductsLoading(true);
             try {
                 const res = await getAllProductsAdminApi();
@@ -65,7 +66,7 @@ export const AdminProvider = () => {
             }
         };
         getAllProducts();
-    }, [])
+    }, [admin])
 
 
     const addProduct = async (data) => {
@@ -109,6 +110,7 @@ export const AdminProvider = () => {
             addProduct,
             deleteProduct,
             setProducts,
+            productsLoading,
             logoutAdmin
         }}>
             <Outlet />

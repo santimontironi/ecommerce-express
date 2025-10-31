@@ -1,6 +1,9 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import logo from '../img/logo.jpg'
+import { Link as ScrollLink } from "react-scroll"
+import { Link as RouterLink } from "react-router-dom"
+
 
 const Nav = () => {
 
@@ -30,17 +33,15 @@ const Nav = () => {
           <button className="text-white xl:text-black text-3xl md:hidden" onClick={handleOpen}>
             <i className="bi bi-x"></i>
           </button>
-          <li><Link className="no-underline" to="/">Inicio</Link></li>
-          <li><Link className="no-underline" to="/nosotros">Nosotros</Link></li>
-          <li><Link className="no-underline" to="/contacto">Contacto</Link></li>
-          <li><Link className="no-underline" target="_blank" to="/productos">Productos</Link></li>
-          <li><Link className="no-underline bg-white text-black p-3 rounded-xl hover:bg-black hover:text-white" to="/admin-login">Administrador</Link></li>
+          <li><ScrollLink className="no-underline hvr-bounce-to-right p-2 cursor-pointer" to="home" smooth={true} duration={500} offset={-70}>Inicio</ScrollLink></li>
+          <li><ScrollLink className="no-underline hvr-bounce-to-right p-2 cursor-pointer" to="aboutus" smooth={true} duration={500} offset={-70}>Nosotros</ScrollLink></li>
+          <li><ScrollLink className="no-underline hvr-bounce-to-right p-2 cursor-pointer" to="contact" smooth={true} duration={500} offset={-70}>Contacto</ScrollLink></li>
+          <li><RouterLink className="no-underline hvr-bounce-to-right p-2" target="_blank" to="/productos">Productos</RouterLink></li>
+          <li><RouterLink className="no-underline bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-800 hover:text-white" to="/admin-login">Administrador</RouterLink></li>
         </ul>
       </nav>
 
     </header>
-
-
 
   )
 }

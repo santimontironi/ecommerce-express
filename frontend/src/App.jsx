@@ -14,14 +14,14 @@ import SecurityRoutes from "./components/SecurityRoutes";
 import { AllProductsProvider } from "../context/AllProductsContext";
 import { ProductByIdProvider } from "../context/ProductByIdContext";
 
+
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
 
         <Route path="/" element={<Layout />} />
-
-
+          
         <Route path="/pay-correct" element={<PayCorrect />} />
         <Route path="/pay-pending" element={<PayPending />} />
         <Route path="/pay-fail" element={<PayFail />} />

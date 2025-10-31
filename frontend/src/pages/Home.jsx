@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
-    <div className="w-full h-screen containerHome flex flex-col items-center justify-center text-center text-white gap-4 mt-7">
+    <div className="w-full h-screen containerHome flex flex-col items-center justify-center text-center text-white gap-4 mt-7" >
       <img src={logo} alt="Logo" className="w-40 mb-6 rounded-2xl shadow-[10px_15px_10px_rgba(0,0,0,0.8)]" />
       <h1 className="text-4xl font-bold mb-4 text-shadow-[5px_5px_10px_rgba(0,0,0,0.8)]">
         Bienvenidos a Nuno Deportes
@@ -17,6 +17,10 @@ const Home = () => {
         <Link to={"/productos"} className="bg-blue-800 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">Ver nuestros productos</Link>
         <Link to={"/contacto"} className="bg-white text-black font-medium text-base sm:text-lg py-3 px-8 rounded-xl hover:bg-[#ececec] active:scale-95 transition-transform duration-200 cursor-pointer">Contáctate con nosotros</Link>
       </div>
+
+      <button className='fixed right-10 bottom-10 border-none bg-transparent cursor-pointer btnWhatsapp z-50'>
+        <img className='w-[70px]' src="https://img.icons8.com/?size=100&id=QkXeKixybttw&format=png&color=000000" alt="btn-whatsapp" />
+      </button>
     </div>
   )
 }
