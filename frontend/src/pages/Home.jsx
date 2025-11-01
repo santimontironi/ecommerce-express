@@ -17,9 +17,9 @@ const Home = () => {
         <Link to={"/productos"} className="bg-blue-800 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">Ver nuestros productos</Link>
       </div>
 
-      <button className='fixed right-10 bottom-10 border-none bg-transparent cursor-pointer btnWhatsapp z-50'>
+      <a href='https://wa.me/543415427021' target='_blank' className='fixed right-10 bottom-10 border-none bg-transparent decoration-0 cursor-pointer btnWhatsapp z-50'>
         <img className='w-[70px]' src="https://img.icons8.com/?size=100&id=QkXeKixybttw&format=png&color=000000" alt="btn-whatsapp" />
-      </button>
+      </a>
     </div>
   )
 }

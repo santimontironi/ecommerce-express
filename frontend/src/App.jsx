@@ -7,7 +7,7 @@ import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
 import AddProduct from "./pages/AddProduct";
 import ProductsPage from "./pages/ProductsPage";
-import ProductById from "./pages/ProductById";
+import Checkout from "./pages/Checkout";
 import ProductsAdmin from "./pages/ProductsAdmin";
 import { AdminProvider } from "../context/adminContext";
 import SecurityRoutes from "./components/SecurityRoutes";
@@ -51,8 +51,8 @@ const App = () => {
           <Route path="/productos" element={<ProductsPage />} />
         </Route>
 
-        <Route element={<ProductByIdProvider />}>
-          <Route path="/producto/:productId" element={<ProductById />} />
+        <Route path="/checkout/:id" element={<ProductByIdProvider />}>
+          <Route index element={<Checkout />} />
         </Route>
 
       </Routes>

@@ -1,12 +1,14 @@
 import { createContext, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { products, getProductByIdApi } from "../api/api";
+import { getProductByIdApi } from "../api/api";
+import { Outlet } from "react-router-dom";
 
 export const ProductByIdContext = createContext();
 
 export const ProductByIdProvider = () => {
 
     const [productById, setProductById] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const { id } = useParams();
 
@@ -33,7 +35,7 @@ export const ProductByIdProvider = () => {
     }, [id])
 
     return (
-        <ProductByIdContext.Provider value={{ productById }}>
+        <ProductByIdContext.Provider value={{ productById, loading }}>
             <Outlet />
         </ProductByIdContext.Provider>
     )

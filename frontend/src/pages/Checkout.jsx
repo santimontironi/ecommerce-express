@@ -1,20 +1,20 @@
 import { useContext } from "react"
-import { ProductContext } from "../../context/getProductContext";
+import { ProductByIdContext } from "../../context/ProductByIdContext";
 import Product from "../components/Product";
 import { useForm } from "react-hook-form"
 import { preferenceApi } from "../../api/api";
 
 const Checkout = () => {
 
-  const { product, loading } = useContext(ProductContext);
+  const { productById, loading } = useContext(ProductByIdContext);
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   async function onSubmit(data) {
     try {
       const response = await preferenceApi({
-        title: product.nombre,
-        unit_price: Number(product.precio),
+        title: productById.name,
+        unit_price: Number(productById.price),
         quantity: Number(data.quantity),
         buyer_email: data.email,
         buyer_address: data.address,
@@ -31,15 +31,15 @@ const Checkout = () => {
     <div className="w-full h-screen">
       <div>
         <div>
-          {loading && product.id === 0 ? <p className="text-center text-2xl">Cargando...</p>
+          {loading && productById._id === 0 ? <p className="text-center text-2xl">Cargando...</p>
             :
-            <Product key={product.id}
-              id={product.id}
-              productName={product.nombre}
-              productPrice={product.precio}
-              productImage={product.imagen}
-              productDescription={product.descripcion}
-              productStock={product.stock}
+            <Product key={productById._id}
+              id={productById._id}
+              productName={productById.name}
+              productPrice={productById.price}
+              productImage={productById.image}
+              productDescription={productById.description}
+              productStock={productById.stock}
             />}
         </div>
 
