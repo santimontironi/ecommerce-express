@@ -52,3 +52,7 @@ export const products = () => {
 export const preferenceApi = (data) => {
     return axios.post(`${urlApi}/create-preference`, data);
 }
+
+export const sendMessageApi = (data) => {
+    return axios.post(`${urlApi}/send-message`, data);
+}
