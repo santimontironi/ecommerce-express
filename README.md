@@ -15,7 +15,7 @@ El objetivo fue crear una web funcional, moderna y fácil de usar, para que el d
 - 🛒 **Sección de tienda** con productos dinámicos.  
 - 👨‍💼 **Panel de administrador** para:
   - Agregar nuevos productos.
-  - Editar o eliminar productos existentes.
+  - Eliminar productos existentes.
   - Subir imágenes desde el panel.
 - 💳 **Integración con la API de Mercado Pago** para procesar pagos en línea.
 - 🔐 **Autenticación básica** en el panel de administrador.
