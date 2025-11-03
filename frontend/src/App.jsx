@@ -51,8 +51,8 @@ const App = () => {
           <Route path="/productos" element={<ProductsPage />} />
         </Route>
 
-        <Route path="/checkout/:id" element={<ProductByIdProvider />}>
-          <Route index element={<Checkout />} />
+        <Route element={<ProductByIdProvider />}>
+          <Route path="/checkout/:id" element={<Checkout />} />
         </Route>
 
       </Routes>
