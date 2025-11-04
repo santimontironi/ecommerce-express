@@ -20,6 +20,10 @@ body {
   background: linear-gradient(to right, #101010, #3b3b3b, #101010);
 }
 
+.containerCheckout {
+  background: linear-gradient(to right, #101010, #3b3b3b, #101010);
+}
+
 .containerProductsPage{
     background-image: url(./img/fondo5.jpg);
     background-repeat: no-repeat;

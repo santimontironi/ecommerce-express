@@ -1,5 +1,6 @@
 import { Preference } from 'mercadopago';
 import client from '../config/mercadopago.js';
+import nodemailer from "nodemailer";
 
 export const createPreference = async (req, res) => {
   try {
@@ -48,5 +49,52 @@ export const createPreference = async (req, res) => {
       error: "Error creando preferencia",
       details: error.message || error,
     });
+  }
+};
+
+export const handleWebhook = async (req, res) => {
+  try {
+    const payment = req.body;
+
+    console.log("Webhook recibido:", payment);
+
+    
+    //verificamos que se trate de un pago aprobado.
+    if (payment.action === "payment.created" || payment.action === "payment.updated") {
+      const data = payment.data;
+
+      // Configurar el transporte de nodemailer
+      if (data && data.status === "approved") {
+        const buyerEmail = data.payer?.email;
+        const product = data.additional_info?.items?.[0] || {};
+        const productTitle = product.title || "Producto";
+        const quantity = product.quantity || 1;
+        const totalAmount = data.transaction_amount || 0;
+
+        //Enviar correo al cliente
+        await transporter.sendMail({
+          from: `"Nuno Deportes" <${process.env.SMTP_USER}>`,
+          to: buyerEmail,
+          subject: "Confirmación de compra - Nuno Deportes",
+          html: `
+            <h2>¡Gracias por tu compra!</h2>
+            <p>Recibimos tu pago correctamente.</p>
+            <p>Producto: <strong>${productTitle}</strong></p>
+            <p>Cantidad: <strong>${quantity}</strong></p>
+            <p>Total abonado: <strong>$${totalAmount}</strong></p>
+            <p>Nos pondremos en contacto contigo pronto para coordinar el envío del producto.</p>
+            <br>
+            <p>Saludos,<br><strong>El equipo de Nuno Deportes</strong></p>
+          `,
+        });
+
+        console.log(`Correo de confirmación enviado a ${buyerEmail}`);
+      }
+    }
+
+    res.sendStatus(200); // Mercado Pago necesita un 200 OK para confirmar recepción
+  } catch (error) {
+    console.error("Error en webhook:", error);
+    res.sendStatus(500);
   }
 };

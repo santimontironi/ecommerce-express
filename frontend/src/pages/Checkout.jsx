@@ -29,7 +29,7 @@ const Checkout = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center p-4">
+    <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center p-4 containerCheckout">
       
       <div className="w-[360px] md:w-[720px] lg:w-[960px] bg-white rounded-xl shadow-xl p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
 
@@ -61,13 +61,12 @@ const Checkout = () => {
 
     
         <div className="w-full flex flex-col">
-          <h2 className="text-[20px] font-semibold mb-3">Finalizar compra</h2>
-
+          <h2 className="text-[20px] font-semibold mb-3 bg-blue-600 text-white p-3 text-center">Finalización de compra</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
             <div className="flex flex-col">
               <label className="text-[13px] mb-1.5">Nombre</label>
               <input
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 {...register("name", { required: true })}
                 placeholder="Tu nombre"
               />
@@ -81,7 +80,7 @@ const Checkout = () => {
             <div className="flex flex-col">
               <label className="text-[13px] mb-1.5">Apellido</label>
               <input
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 {...register("surname", { required: true })}
                 placeholder="Tu apellido"
               />
@@ -96,7 +95,7 @@ const Checkout = () => {
               <label className="text-[13px] mb-1.5">Email</label>
               <input
                 type="email"
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 {...register("email", { required: true })}
                 placeholder="Tu email"
               />
@@ -111,7 +110,7 @@ const Checkout = () => {
               <label className="text-[13px] mb-1.5">Teléfono</label>
               <input
                 type="text"
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 {...register("phone", { required: true })}
                 placeholder="Tu teléfono"
               />
@@ -126,7 +125,7 @@ const Checkout = () => {
               <label className="text-[13px] mb-1.5">Dirección</label>
               <input
                 type="text"
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 {...register("address", { required: true })}
                 placeholder="Tu dirección"
               />
@@ -142,7 +141,7 @@ const Checkout = () => {
               <input
                 type="number"
                 min={1}
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                 {...register("quantity", { required: true })}
                 placeholder="Cantidad a comprar"
               />
@@ -155,7 +154,7 @@ const Checkout = () => {
 
             <button
               type="submit"
-              className="h-11 mt-1.5 bg-blue-600 text-white font-medium text-[16px] rounded-lg hover:opacity-95 transition-opacity"
+              className="h-11 mt-1.5 bg-blue-600 text-white font-medium text-[16px] rounded-lg hover:opacity-95 transition-opacity cursor-pointer"
             >
               Pagar
             </button>
