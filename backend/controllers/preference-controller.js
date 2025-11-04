@@ -66,6 +66,8 @@ export const handleWebhook = async (req, res) => {
       // Configurar el transporte de nodemailer
       if (data && data.status === "approved") {
         const buyerEmail = data.payer?.email;
+        const buyerPhone = data.payer?.phone?.number;
+        const buyerAddress = data.payer?.address?.street_name;
         const product = data.additional_info?.items?.[0] || {};
         const productTitle = product.title || "Producto";
         const quantity = product.quantity || 1;
@@ -89,6 +91,25 @@ export const handleWebhook = async (req, res) => {
         });
 
         console.log(`Correo de confirmación enviado a ${buyerEmail}`);
+
+        await transporter.sendMail({
+          from: `"Nuno Deportes" <${process.env.SMTP_USER}>`,
+          to: process.env.SMTP_USER, // se envía al correo de la tienda
+          subject: `🛒 Nueva venta realizada - ${productTitle}`,
+          html: `
+            <h2>Nueva compra confirmada</h2>
+            <p><strong>Cliente:</strong> ${buyerEmail}</p>
+            <p><strong>Teléfono:</strong> ${buyerPhone}</p>
+            <p><strong>Dirección:</strong> ${buyerAddress}</p>
+            <p><strong>Producto:</strong> ${productTitle}</p>
+            <p><strong>Cantidad:</strong> ${quantity}</p>
+            <p><strong>Total:</strong> $${totalAmount}</p>
+            <hr>
+            <p>Verificá el pedido y prepará el envío.</p>
+          `,
+        });
+
+        console.log(`Notificación de venta enviada al correo de la tienda.`);
       }
     }
 
