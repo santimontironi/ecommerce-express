@@ -39,6 +39,10 @@ body {
     animation: movimiento 2s ease-in-out infinite;
 }
 
+footer{
+    background: linear-gradient(100deg,#101010,#3b3b3b);
+}
+
 @keyframes movimiento {
     0%, 100% {
         transform: translateY(0);
