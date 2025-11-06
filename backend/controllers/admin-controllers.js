@@ -3,7 +3,7 @@ import bcrypt from "bcrypt"
 import dotenv from "dotenv"
 import jwt from 'jsonwebtoken'
 
-const createAdmin = async () => {
+export const createAdmin = async () => {
   try {
 
     const username = dotenv.config().parsed.ADMIN_USERNAME;
