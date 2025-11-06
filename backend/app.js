@@ -27,18 +27,20 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(async (req, res, next) => {
+const initializeApp = async () => {
   try {
     await connectDB();
-    next();
+    console.log('✅ Base de datos conectada');
+    
+    await createAdmin();
+    console.log('✅ Admin verificado/creado');
   } catch (error) {
-    console.error('Error de conexión DB:', error);
-    return res.status(500).json({ 
-      error: 'Error de conexión a base de datos',
-      details: error.message 
-    });
+    console.error('❌ Error inicializando app:', error);
+    // No lanzar error para que la app siga funcionando
   }
-});
+};
+
+initializeApp();
 
 app.use('', preferenceRouter);
 app.use('', adminRouter);
