@@ -30,7 +30,7 @@ El objetivo fue crear una web funcional, moderna y fácil de usar, para que el d
 - TailwindCSS
 
 ### ⚙️ Backend
-- Express (JavaScript)  
+- Express y NodeJS (JavaScript)  
 - MongoDB 
 
 ### 💳 Pasarela de pago
