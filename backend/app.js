@@ -3,7 +3,6 @@ import { router as preferenceRouter } from "./routes/preference-routes.js";
 import { router as adminRouter } from "./routes/admin-routes.js";
 import {router as productsRouter} from "./routes/product-routes.js";
 import {router as userRouter} from "./routes/user-routes.js";
-import { createAdmin } from "./controllers/admin-controllers.js";
 import connectDB from "./bd/bd.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -28,20 +27,18 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-const initializeApp = async () => {
+app.use(async (req, res, next) => {
   try {
     await connectDB();
-    console.log('✅ Base de datos conectada');
-    
-    await createAdmin();
-    console.log('✅ Admin verificado/creado');
+    next();
   } catch (error) {
-    console.error('❌ Error inicializando app:', error);
-    // No lanzar error para que la app siga funcionando
+    console.error('Error de conexión DB:', error);
+    return res.status(500).json({ 
+      error: 'Error de conexión a base de datos',
+      details: error.message 
+    });
   }
-};
-
-initializeApp();
+});
 
 app.use('', preferenceRouter);
 app.use('', adminRouter);
