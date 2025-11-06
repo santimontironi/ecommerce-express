@@ -29,12 +29,12 @@ export const createPreference = async (req, res) => {
           },
         },
         back_urls: {
-          success: "https://nice-bluebird.ngrok.io/pay-correct",
-          failure: "https://nice-bluebird.ngrok.io/pay-fail",
-          pending: "https://nice-bluebird.ngrok.io/pay-pending",
+          success: "https://nunodeportes.netlify.app/pay-correct",
+          failure: "https://nunodeportes.netlify.app/pay-fail",
+          pending: "https://nunodeportes.netlify.app/pay-pending",
         },
         auto_return: "approved",
-        notification_url: "https://nice-bluebird.ngrok.io/webhook",
+        notification_url: "https://nunodeportes.netlify.app/webhook",
       },
     });
 
