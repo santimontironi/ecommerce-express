@@ -3,11 +3,13 @@ import bcrypt from "bcrypt"
 import dotenv from "dotenv"
 import jwt from 'jsonwebtoken'
 
+dotenv.config();
+
 export const createAdmin = async () => {
   try {
 
-    const username = dotenv.config().parsed.ADMIN_USERNAME;
-    const password = dotenv.config().parsed.ADMIN_PASSWORD;
+    const username = process.env.ADMIN_USERNAME;
+    const password = process.env.ADMIN_PASSWORD;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
