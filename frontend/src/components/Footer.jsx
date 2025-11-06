@@ -4,9 +4,9 @@ import { Link as RouterLink } from "react-router-dom"
 
 const Footer = () => {
     return (
-        <footer className="w-full h-[850px] 2xl:h-[400px] flex flex-col justify-center items-center">
+        <footer className="w-full h-[850px] lg:h-[800px] 2xl:h-[400px] flex flex-col justify-center items-center">
 
-            <div className="w-[60%] flex flex-col md:flex-row items-center justify-between gap-10 md:gap-0">
+            <div className="w-[60%] flex flex-col xl:flex-row items-center justify-between gap-10 xl:gap-0">
                 <img className="w-[150px] rounded-2xl" src={logo} alt="Logo" />
                 <div className="flex flex-col gap-5 items-center">
                     <h3 className="text-white text-2xl font-bold pb-3 border-b-2 border-blue-500">Enlaces rápidos</h3>

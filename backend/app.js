@@ -21,7 +21,18 @@ app.use(cors(
     }
 ))
 
-connectDB();
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Error de conexión DB:', error);
+    return res.status(500).json({ 
+      error: 'Error de conexión a base de datos',
+      details: error.message 
+    });
+  }
+});
 
 app.use('', preferenceRouter);
 app.use('', adminRouter);

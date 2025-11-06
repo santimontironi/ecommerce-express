@@ -1,19 +1,20 @@
 import { createContext, useState, useEffect } from "react";
-import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi, deleteProductApi, logoutAdminApi } from "../api/api";
+import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi, deleteProductApi, logoutAdminApi, sendMessageApi } from "../api/api";
 import { Outlet } from "react-router-dom";
 
 export const AdminContext = createContext();
 
-export const AdminProvider = () => {
+export const AdminProvider = ({children}) => {
     const [admin, setAdmin] = useState(null);
     const [loginLoading, setLoginLoading] = useState(false);
     const [dashboardLoading, setDashboardLoading] = useState(true);
     const [productsLoading,setProductsLoading] = useState(true);
+    const [messageLoading,setMessageLoading] = useState(false);
     const [products, setProducts] = useState([]);
 
     const signInAdmin = async (data) => {
+        setLoginLoading(true);
         try {
-            setLoginLoading(true);
             const res = await loginAdminApi(data);
             setAdmin(res.data.admin);
             return res.data;
@@ -100,6 +101,21 @@ export const AdminProvider = () => {
         }
     };
 
+    const sendMessage = async (data) => {
+        setMessageLoading(true);
+        try {
+            const res = await sendMessageApi(data);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+        finally{
+            setTimeout(() => {
+                setMessageLoading(false);
+            },2000)
+        }
+    }
+
     return (
         <AdminContext.Provider value={{
             admin,
@@ -111,9 +127,11 @@ export const AdminProvider = () => {
             deleteProduct,
             setProducts,
             productsLoading,
-            logoutAdmin
+            logoutAdmin,
+            sendMessage,
+            messageLoading
         }}>
-            <Outlet />
+            {children || <Outlet />}
         </AdminContext.Provider>
     );
 };

@@ -98,7 +98,8 @@ export const handleWebhook = async (req, res) => {
           subject: `🛒 Nueva venta realizada - ${productTitle}`,
           html: `
             <h2>Nueva compra confirmada</h2>
-            <p><strong>Cliente:</strong> ${buyerEmail}</p>
+            <p><strong>Nombre:</strong> ${buyerName}</p>
+            <p><strong>Email cliente:</strong> ${buyerEmail}</p>
             <p><strong>Teléfono:</strong> ${buyerPhone}</p>
             <p><strong>Dirección:</strong> ${buyerAddress}</p>
             <p><strong>Producto:</strong> ${productTitle}</p>

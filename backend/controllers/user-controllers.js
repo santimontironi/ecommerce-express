@@ -1,4 +1,7 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const sendMessage = async (req, res) => {
     try {
@@ -12,6 +15,9 @@ export const sendMessage = async (req, res) => {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS,
             },
+            tls: {
+                rejectUnauthorized: false, 
+            }
         });
 
         const mailOptions = {
@@ -37,6 +43,7 @@ export const sendMessage = async (req, res) => {
         res.status(200).json({ message: 'Message sent successfully' });
     }
     catch (error) {
-        res.status(500).json({ error: 'Error sending message' });
+        console.error('Error sending message:', error);
+        res.status(500).json({ error: 'Error sending message', details: error.message || error });
     }
 }

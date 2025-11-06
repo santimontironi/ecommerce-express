@@ -3,6 +3,7 @@ import AboutUs from "../src/pages/AboutUs";
 import Contact from "../src/pages/Contact";
 import Nav from "../src/components/Nav";
 import Footer from "../src/components/Footer";
+import { AdminProvider } from "../context/adminContext";
 
 const Layout = () => {
   return (
@@ -14,9 +15,12 @@ const Layout = () => {
       <section id="aboutus">
         <AboutUs />
       </section>
-      <section id="contact">
-        <Contact />
-      </section>
+      <AdminProvider>
+        <section id="contact">
+          <Contact />
+        </section>
+
+      </AdminProvider>
       <Footer />
     </div>
   );
