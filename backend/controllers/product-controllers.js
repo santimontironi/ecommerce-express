@@ -32,7 +32,7 @@ export const getProductById = async (req,res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const { nombre, descripcion, precio } = req.body;
+    const { name, description, price, stock } = req.body;
 
     if (!req.file) {
       return res.status(400).json({ message: "No se recibió ninguna imagen" });
@@ -47,10 +47,11 @@ export const addProduct = async (req, res) => {
     });
 
     const nuevoProducto = {
-      nombre,
-      descripcion,
-      precio,
-      imagen: result.secure_url,
+      name,
+      description,
+      price,
+      stock,
+      image: result.secure_url,
     };
 
     res.status(201).json({
@@ -60,7 +61,7 @@ export const addProduct = async (req, res) => {
 
     const product = new Product(nuevoProducto);
     await product.save();
-    
+
   } catch (error) {
     console.error("Error al subir producto:", error);
     res.status(500).json({ message: "Error al agregar producto", error });
