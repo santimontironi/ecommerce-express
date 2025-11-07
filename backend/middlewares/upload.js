@@ -1,13 +1,12 @@
 import multer from "multer";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-import cloudinary from "./cloudinary.js";
+import path from "path";
 
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "productosNunoDeportes",
-    allowed_formats: ["jpg", "png", "jpeg", "webp"],
-    transformation: [{ width: 500, height: 500, crop: "limit" }],
+// Guardamos temporalmente en "uploads"
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   },
 });
 
