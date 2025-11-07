@@ -3,7 +3,6 @@ import { router as preferenceRouter } from "./routes/preference-routes.js";
 import { router as adminRouter } from "./routes/admin-routes.js";
 import {router as productsRouter} from "./routes/product-routes.js";
 import {router as userRouter} from "./routes/user-routes.js";
-import connectDB from "./bd/bd.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
@@ -26,19 +25,6 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
-
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (error) {
-    console.error('Error de conexión DB:', error);
-    return res.status(500).json({ 
-      error: 'Error de conexión a base de datos',
-      details: error.message 
-    });
-  }
-});
 
 app.use('', preferenceRouter);
 app.use('', adminRouter);
