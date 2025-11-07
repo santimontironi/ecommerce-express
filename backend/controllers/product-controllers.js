@@ -1,7 +1,6 @@
 import Product from "../models/products.js";
 import dotenv from "dotenv";
 import cloudinary from "../middlewares/cloudinary.js";
-import fs from "fs";
 dotenv.config();
 
 cloudinary.config({
@@ -58,6 +57,10 @@ export const addProduct = async (req, res) => {
       message: "✅ Producto agregado correctamente",
       producto: nuevoProducto,
     });
+
+    const product = new Product(nuevoProducto);
+    await product.save();
+    
   } catch (error) {
     console.error("Error al subir producto:", error);
     res.status(500).json({ message: "Error al agregar producto", error });
