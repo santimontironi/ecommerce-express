@@ -50,7 +50,6 @@ export const loginAdmin = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', //es true cuando estamos en https, en desarollo es http
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", //lax es para que se envie el cookie en el mismo dominio (localhost), y none es para que sea en diferentes
-      maxAge: 86400000
     });
 
     return res.status(200).json({ message: "Inicio de sesión exitoso", admin });
