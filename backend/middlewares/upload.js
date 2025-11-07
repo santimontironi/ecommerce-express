@@ -1,17 +1,18 @@
-import multer from "multer"; // Importa la librería multer, que sirve para manejar archivos subidos en peticiones HTTP.
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
 
-const storage = multer.diskStorage({
-  // Define la carpeta donde se guardarán los archivos subidos ("uploads/").
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  }, 
+export const uploadToCloudinary = async (filePath) => {
+  try {
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: "nunoImagenes",
+    });
+    
+    // Elimina el archivo local una vez subido
+    fs.unlinkSync(filePath);
 
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname)); 
+    return result.secure_url; // URL pública de la imagen
+  } catch (error) {
+    console.error("Error subiendo a Cloudinary:", error);
+    throw error;
   }
-  // Genera un nombre único para cada archivo usando la fecha y un número aleatorio y le añade la extensión original del archivo.
-});
-
-export const upload = multer({ storage: storage });
+};
