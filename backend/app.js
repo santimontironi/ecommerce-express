@@ -5,8 +5,6 @@ import {router as productsRouter} from "./routes/product-routes.js";
 import {router as userRouter} from "./routes/user-routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -30,14 +28,5 @@ app.use('', preferenceRouter);
 app.use('', adminRouter);
 app.use('', productsRouter);
 app.use('', userRouter);
-
-const __filename = fileURLToPath(import.meta.url); 
-// Convierte la URL del módulo actual en la ruta de archivo completa
-
-const __dirname = path.dirname(__filename); 
-// Obtiene la carpeta donde se encuentra este archivo
-
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
-// Sirve los archivos de la carpeta "uploads" de forma pública en la ruta /uploads
 
 export default app;
