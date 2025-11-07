@@ -1,6 +1,6 @@
 import Product from "../models/products.js";
 import dotenv from "dotenv";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
 dotenv.config();
 
@@ -39,23 +39,21 @@ export const addProduct = async (req, res) => {
       return res.status(400).json({ message: "No se recibió ninguna imagen" });
     }
 
-    // Subimos a Cloudinary
+    // Subida a Cloudinary
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "productos",
     });
 
-    // Eliminamos archivo local
+    // Eliminamos el archivo local
     fs.unlinkSync(req.file.path);
 
-    // Guardamos URL segura
+    // Guardamos datos
     const nuevoProducto = {
       nombre,
       descripcion,
       precio,
       imagen: result.secure_url,
     };
-
-    // Ejemplo: await db.query('INSERT INTO productos SET ?', nuevoProducto);
 
     res.status(201).json({
       message: "✅ Producto agregado correctamente",
