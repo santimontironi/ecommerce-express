@@ -1,6 +1,6 @@
 import Product from "../models/products.js";
 import dotenv from "dotenv";
-import cloudinary from "../config/cloudinary.js";
+import cloudinary from "../middlewares/cloudinary.js";
 import fs from "fs";
 dotenv.config();
 
