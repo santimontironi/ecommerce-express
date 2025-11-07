@@ -49,18 +49,19 @@ export const addProduct = async (req, res) => {
     const nuevoProducto = {
       name,
       description,
-      price,
-      stock,
+      price: Number(price),
+      stock: Number(stock),
       image: result.secure_url,
     };
 
-    res.status(201).json({
-      message: "✅ Producto agregado correctamente",
-      producto: nuevoProducto,
-    });
-
     const product = new Product(nuevoProducto);
     await product.save();
+
+    res.status(201).json({
+      message: "✅ Producto agregado correctamente",
+      product: nuevoProducto,
+    });
+
 
   } catch (error) {
     console.error("Error al subir producto:", error);
