@@ -16,6 +16,9 @@ export const AllProductsProvider = () => {
             setLoading(true);
             try{
                 const res = await products();
+
+                console.log('PRODUCTOS: ', res.data.products);
+
                 setAllProducts(res.data.products);
             }
             catch(error){
