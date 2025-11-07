@@ -4,12 +4,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export async function startServer() {
+export const startServer = async () => {
   try {
     await connectDB();
     const PORT = process.env.PORT || 3000;
-
-    console.log("Servidor iniciado correctamente");
 
     app.listen(PORT, () => {
       console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
@@ -18,5 +16,6 @@ export async function startServer() {
     console.error("❌ Error al iniciar el servidor:", error.message);
     process.exit(1);
   }
-}
+};
+
 
