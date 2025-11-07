@@ -39,15 +39,14 @@ export const addProduct = async (req, res) => {
       return res.status(400).json({ message: "No se recibió ninguna imagen" });
     }
 
-    // Subida a Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    // Convertir el buffer a base64
+    const fileBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+
+    // Subir a Cloudinary directamente desde memoria
+    const result = await cloudinary.uploader.upload(fileBase64, {
       folder: "productos",
     });
 
-    // Eliminamos el archivo local
-    fs.unlinkSync(req.file.path);
-
-    // Guardamos datos
     const nuevoProducto = {
       nombre,
       descripcion,
