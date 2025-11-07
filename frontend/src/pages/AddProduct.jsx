@@ -23,7 +23,6 @@ const AddProduct = () => {
         formData.append('name', data.name)
         formData.append('description', data.description)
         formData.append('price', data.price)
-        formData.append('stock', data.stock)
 
         try{
             setCorrect(true)
@@ -104,19 +103,6 @@ const AddProduct = () => {
                         className="w-full h-10 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {errors.price && <span className="text-[14px] text-red-600 mt-1">El precio es requerido</span>}
-                </div>
-
-                <div className="flex flex-col mb-6">
-                    <label htmlFor="Stock" className="text-4 font-semibold text-gray-700 mb-2">Stock</label>
-                    <input
-                        {...register("stock", { required: true })}
-                        type="number"
-                        id="stock"
-                        name="stock"
-                        placeholder="Stock"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {errors.stock && <span className="text-[14px] text-red-600 mt-1">El stock es requerido</span>}
                 </div>
 
                 <div className="flex justify-center">

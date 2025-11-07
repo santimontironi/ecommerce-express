@@ -62,7 +62,6 @@ const ProductsAdmin = () => {
                                 productName={product.name}
                                 productPrice={product.price}
                                 productDescription={product.description}
-                                productStock={product.stock}
                                 handleDelete={handleDelete}
                             />
                         </div>

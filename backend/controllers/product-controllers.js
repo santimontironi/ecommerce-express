@@ -32,7 +32,7 @@ export const getProductById = async (req,res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const { name, description, price, stock } = req.body;
+    const { name, description, price } = req.body;
 
     if (!req.file) {
       return res.status(400).json({ message: "No se recibió ninguna imagen" });
@@ -50,7 +50,6 @@ export const addProduct = async (req, res) => {
       name,
       description,
       price: Number(price),
-      stock: Number(stock),
       image: result.secure_url,
     };
 

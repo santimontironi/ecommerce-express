@@ -21,7 +21,7 @@ const ProductsPage = () => {
         </div> : (
           <div className="flex flex-col items-center justify-center md:grid md:grid-cols-2 xl:grid-cols-3 xl:w-[1000px] 2xl:w-[1200px] md:place-content-center gap-5 md:gap-10 xl:gap-15 mx-auto mt-10">
             {allProducts.map((item, index) => (
-              <Product key={index} id={item._id} productName={item.name} productDescription={item.description} productPrice={item.price} productImage={item.image} productStock={item.stock} btnBuy={true} />
+              <Product key={index} id={item._id} productName={item.name} productDescription={item.description} productPrice={item.price} productImage={item.image} btnBuy={true} />
             ))}
           </div>
         )

@@ -17,8 +17,6 @@ export const AllProductsProvider = () => {
             try{
                 const res = await products();
 
-                console.log('PRODUCTOS: ', res.data.products);
-
                 setAllProducts(res.data.products);
             }
             catch(error){
