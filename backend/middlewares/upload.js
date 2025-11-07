@@ -1,18 +1,14 @@
-import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "./cloudinary.js";
 
-export const uploadToCloudinary = async (filePath) => {
-  try {
-    const result = await cloudinary.uploader.upload(filePath, {
-      folder: "nunoImagenes",
-    });
-    
-    // Elimina el archivo local una vez subido
-    fs.unlinkSync(filePath);
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "productosNunoDeportes",
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
+    transformation: [{ width: 500, height: 500, crop: "limit" }],
+  },
+});
 
-    return result.secure_url; // URL pública de la imagen
-  } catch (error) {
-    console.error("Error subiendo a Cloudinary:", error);
-    throw error;
-  }
-};
+export const upload = multer({ storage });
