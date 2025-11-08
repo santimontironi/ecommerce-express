@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { CheckCircle } from 'lucide-react'
 
 const PayCorrect = () => {
@@ -31,13 +30,6 @@ const PayCorrect = () => {
           </p>
         </div>
 
-        
-        <Link 
-          href="/"
-          className="inline-block w-full bg-linear-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg"
-        >
-          Volver al Inicio
-        </Link>
       </div>
     </div>
   )
