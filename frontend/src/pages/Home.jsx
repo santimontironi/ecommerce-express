@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
-    <div className="w-full h-screen containerHome flex flex-col items-center justify-center text-center text-white gap-4 mt-7" >
+    <div className="w-full h-screen containerHome flex flex-col items-center justify-center text-center text-white gap-4 mt-7 xl:mt-12 2xl:mt-7" >
       <img src={logo} alt="Logo" className="w-40 mb-6 rounded-2xl shadow-[10px_15px_10px_rgba(0,0,0,0.8)]" />
       <h1 className="text-4xl font-bold mb-4 text-shadow-[5px_5px_10px_rgba(0,0,0,0.8)]">
         Bienvenidos a Nuno Deportes

@@ -4,7 +4,7 @@ import { Link as RouterLink } from "react-router-dom"
 
 const Footer = () => {
     return (
-        <footer className="w-full h-[850px] lg:h-[800px] 2xl:h-[400px] flex flex-col justify-center items-center">
+        <footer className="w-full h-[850px] xl:h-[450px] 2xl:h-[400px] flex flex-col justify-center items-center">
 
             <div className="w-[60%] flex flex-col xl:flex-row items-center justify-between gap-10 xl:gap-0">
                 <img className="w-[150px] rounded-2xl" src={logo} alt="Logo" />
