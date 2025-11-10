@@ -17,14 +17,12 @@ const Contact = () => {
   const onSubmit = async (data) => {
     try {
       const res = await sendMessage(data);
-      setMessageSent(res.data.message);
+      setMessageSent(res.message);
       reset()
       setErrorMessage('');
     }
     catch (error) {
-      setTimeout(() => {
-        setErrorMessage(error.response?.data?.message || 'Error al enviar mensaje')
-      }, 1500)
+      setErrorMessage(error.response?.data?.message)
     }
   };
 
