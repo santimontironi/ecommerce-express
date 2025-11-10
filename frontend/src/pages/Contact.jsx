@@ -6,7 +6,7 @@ import Loader from "../components/Loader";
 
 const Contact = () => {
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -18,6 +18,7 @@ const Contact = () => {
     try {
       const res = await sendMessage(data);
       setMessageSent(res.data.message);
+      reset()
       setErrorMessage('');
     }
     catch (error) {

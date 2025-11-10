@@ -52,7 +52,7 @@ footer{
     }
 }
 
-@media screen and (max-width:678px){
+@media screen and (max-width:768px){
     nav{
         background: linear-gradient(100deg,#101010,#3b3b3b);
     }
