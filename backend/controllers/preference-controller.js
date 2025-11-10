@@ -1,16 +1,8 @@
 import { Preference, Payment } from 'mercadopago';
 import client from '../config/mercadopago.js';
-import nodemailer from "nodemailer";
+import { Resend } from 'resend';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
-  secure: process.env.SMTP_SECURE === "true",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export const createPreference = async (req, res) => {
   try {
@@ -64,78 +56,89 @@ export const createPreference = async (req, res) => {
 
 export const handleWebhook = async (req, res) => {
   try {
-    // Mercado Pago envía el tipo de notificación en query params
     const { type, data } = req.query;
+    console.log('Webhook recibido - Type:', type, 'Data:', data);
 
-    console.log("Webhook recibido - Type:", type, "Data:", data);
-
-    // Verificar que sea una notificación de pago
-    if (type === "payment") {
+    if (type === 'payment') {
       const paymentId = data.id;
-
-      // Obtener los detalles completos del pago desde la API de Mercado Pago
       const payment = new Payment(client);
       const paymentData = await payment.get({ id: paymentId });
 
-      console.log("Estado del pago:", paymentData.status);
+      console.log('Estado del pago:', paymentData.status);
 
-      
-      if (paymentData.status === "approved") {
+      if (paymentData.status === 'approved') {
         const buyerEmail = paymentData.payer?.email;
-        const buyerName = paymentData.payer?.first_name || paymentData.payer?.name || "Cliente";
-        const buyerPhone = paymentData.payer?.phone?.number || "No proporcionado";
-        const buyerAddress = paymentData.additional_info?.payer?.address?.street_name || "No proporcionada";
-        
+        const buyerName = paymentData.payer?.first_name || paymentData.payer?.name || 'Cliente';
+        const buyerPhone = paymentData.payer?.phone?.number || 'No proporcionado';
+        const buyerAddress = paymentData.additional_info?.payer?.address?.street_name || 'No proporcionada';
         const product = paymentData.additional_info?.items?.[0] || {};
-        const productTitle = product.title || "Producto";
+        const productTitle = product.title || 'Producto';
         const quantity = product.quantity || 1;
         const totalAmount = paymentData.transaction_amount || 0;
 
-        // Enviar correo al cliente
-        await transporter.sendMail({
-          from: `"Nuno Deportes" <${process.env.SMTP_USER}>`,
+        const baseStyle = `
+          font-family: 'Arial', sans-serif;
+          color: #000;
+          background-color: #fff;
+          border: 1px solid #000;
+          border-radius: 10px;
+          padding: 24px;
+          max-width: 600px;
+          margin: auto;
+          line-height: 1.6;
+        `;
+
+        await resend.emails.send({
+          from: 'Nuno Deportes <onboarding@resend.dev>',
           to: buyerEmail,
-          subject: "Confirmación de compra - Nuno Deportes",
+          subject: 'Confirmación de compra - Nuno Deportes',
           html: `
-            <h2>¡Gracias por tu compra, ${buyerName}!</h2>
-            <p>Recibimos tu pago correctamente.</p>
-            <p>Producto: <strong>${productTitle}</strong></p>
-            <p>Cantidad: <strong>${quantity}</strong></p>
-            <p>Total abonado: <strong>$${totalAmount} ARS</strong></p>
-            <p>Nos pondremos en contacto contigo pronto para coordinar el envío del producto.</p>
-            <br>
-            <p>Saludos,<br><strong>El equipo de Nuno Deportes</strong></p>
+            <div style="${baseStyle}">
+              <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">¡Gracias por tu compra, ${buyerName}!</h2>
+              <p>Recibimos tu pago correctamente y estamos procesando tu pedido.</p>
+              <div style="margin-top: 20px;">
+                <p><strong>Producto:</strong> ${productTitle}</p>
+                <p><strong>Cantidad:</strong> ${quantity}</p>
+                <p><strong>Total abonado:</strong> $${totalAmount} ARS</p>
+              </div>
+              <hr style="border: 1px solid #000; margin: 20px 0;">
+              <p>Nos pondremos en contacto contigo pronto para coordinar el envío.</p>
+              <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
+            </div>
           `,
         });
 
         console.log(`Correo de confirmación enviado a ${buyerEmail}`);
 
-        // Enviar correo a la tienda con los detalles de la compra
-        await transporter.sendMail({
-          from: `"Nuno Deportes" <${process.env.SMTP_USER}>`,
-          to: process.env.SMTP_USER,
-          subject: `🛒 Nueva venta realizada - ${productTitle}`,
+        // 🏪 Email para la tienda
+        await resend.emails.send({
+          from: 'Nuno Deportes <onboarding@resend.dev>',
+          to: 'brunoborlo3@gmail.com', // o process.env.SMTP_USER si querés mantenerlo dinámico
+          subject: `🛒 Nueva venta - ${productTitle}`,
           html: `
-            <h2>Nueva compra confirmada</h2>
-            <p><strong>Nombre:</strong> ${buyerName}</p>
-            <p><strong>Email cliente:</strong> ${buyerEmail}</p>
-            <p><strong>Teléfono:</strong> ${buyerPhone}</p>
-            <p><strong>Dirección:</strong> ${buyerAddress}</p>
-            <p><strong>Producto:</strong> ${productTitle}</p>
-            <p><strong>Cantidad:</strong> ${quantity}</p>
-            <p><strong>Total:</strong> $${totalAmount} ARS</p>
-            <hr>
-            <p>Verificá el pedido y prepará el envío.</p>
+            <div style="${baseStyle}">
+              <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">Nueva compra confirmada</h2>
+              <p><strong>Nombre:</strong> ${buyerName}</p>
+              <p><strong>Email cliente:</strong> ${buyerEmail}</p>
+              <p><strong>Teléfono:</strong> ${buyerPhone}</p>
+              <p><strong>Dirección:</strong> ${buyerAddress}</p>
+              <p><strong>Producto:</strong> ${productTitle}</p>
+              <p><strong>Cantidad:</strong> ${quantity}</p>
+              <p><strong>Total:</strong> $${totalAmount} ARS</p>
+              <hr style="border: 1px solid #000; margin: 20px 0;">
+              <p>Verificá el pedido y prepará el envío.</p>
+              <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
+            </div>
           `,
         });
 
-        console.log(`Notificación de venta enviada al correo de la tienda.`);
+        console.log('Notificación de venta enviada al correo de la tienda.');
       }
     }
 
     res.sendStatus(200);
   } catch (error) {
-    console.error("Error en webhook:", error);
+    console.error('Error en webhook:', error);
     res.sendStatus(200);
   }
 };
