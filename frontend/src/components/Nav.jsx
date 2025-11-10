@@ -28,9 +28,9 @@ const Nav = () => {
       <nav className={`fixed top-0 right-0 h-screen w-[140px] flex flex-col items-center py-10 
                     transform transition-transform duration-500 ease-in-out
                     ${open ? "translate-x-0 navOpen" : "translate-x-full"}
-                    xl:static xl:flex xl:flex-row xl:h-auto xl:w-auto xl:translate-x-0 xl:py-0`}>
-        <ul className="flex flex-col items-center justify-center gap-5 absolute top-[30%] md:static xl:flex-row md:gap-8 text-white xl:text-black font-bold">
-          <button className="text-white xl:text-black text-3xl xl:hidden" onClick={handleOpen}>
+                    md:static md:flex md:flex-row md:h-auto md:w-auto md:translate-x-0 md:py-0`}>
+        <ul className="flex flex-col items-center justify-center gap-5 absolute top-[30%] md:static md:flex-row md:gap-8 text-white md:text-black font-bold">
+          <button className="text-white xl:text-black md:hidden text-3xl" onClick={handleOpen}>
             <i className="bi bi-x"></i>
           </button>
           <li><ScrollLink className="no-underline hvr-bounce-to-right p-2 cursor-pointer" to="home" smooth={true} duration={500} offset={-70}>Inicio</ScrollLink></li>
