@@ -57,9 +57,9 @@ export const sendMessage = async function (req, res) {
       `,
     })
 
-    res.status(200).json({ success: true })
+    res.status(200).json({ message: 'Mensaje enviado correctamente' })
   } catch (err) {
     console.error('Error al enviar:', err)
-    res.status(500).json({ error: 'Error al enviar el correo' })
+    res.status(500).json({ message: 'Error al enviar el correo' })
   }
 }
