@@ -17,7 +17,6 @@ const Contact = () => {
   const onSubmit = async (data) => {
     try {
       const res = await sendMessage(data);
-      console.log('Respuesta del backend:', res);
       setMessageSent(res.message);
       reset()
       setErrorMessage('');
