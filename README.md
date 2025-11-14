@@ -1,9 +1,11 @@
 # 🛍️ E-Commerce | Proyecto Web para un cliente.
 
+## Despliegue: https://nunodeportes.netlify.app/
+
 ## 📖 Descripción
 
 Este proyecto es un **sitio web e-commerce** desarrollado como una **landing page con tienda online integrada**.  
-Incluye un **panel de administración** para gestionar productos y está conectado con la **API de Mercado Pago** para procesar los pagos de manera segura.
+Incluye un **panel de administración** para gestionar productos (agregar y eliminar) y está conectado con la **API de Mercado Pago** para procesar los pagos de manera segura.
 
 El objetivo fue crear una web funcional, moderna y fácil de usar, para que el dueño pueda administrar su tienda sin conocimientos técnicos.
 
