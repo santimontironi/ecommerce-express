@@ -1,6 +1,5 @@
 import { Preference, Payment } from 'mercadopago';
 import client from '../config/mercadopago.js';
-import crypto from "crypto";
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -11,16 +10,9 @@ const pendingOrders = new Map();
 
 export const createPreference = async (req, res) => {
   try {
-    const {
-      title, unit_price, quantity,
-      buyer_email, buyer_address, buyer_phone,
-      buyer_name, buyer_surname
-    } = req.body;
+    const { title, unit_price, quantity, buyer_email, buyer_address, buyer_phone, buyer_name, buyer_surname } = req.body;
 
     const preference = new Preference(client);
-
-    // Generamos external_reference válido
-    const externalRef = crypto.randomUUID();
 
     const result = await preference.create({
       body: {
@@ -43,38 +35,43 @@ export const createPreference = async (req, res) => {
           },
         },
         back_urls: {
-          success: "https://nunodeportes.vercel.app/pay-correct",
-          failure: "https://nunodeportes.vercel.app/pay-fail",
-          pending: "https://nunodeportes.vercel.app/pay-pending",
+          success: "https://nunodeportes.netlify.app/pay-correct",
+          failure: "https://nunodeportes.netlify.app/pay-fail",
+          pending: "https://nunodeportes.netlify.app/pay-pending",
         },
         auto_return: "approved",
         notification_url: "https://nunodeportes.vercel.app/webhook",
-        external_reference: externalRef
+        // Agregar external_reference para vincular datos
+        external_reference: result.id || Date.now().toString(),
       },
     });
 
-    // Guardamos usando external_reference
-    pendingOrders.set(externalRef, {
+    // Guardar datos del comprador asociados al preference_id
+    pendingOrders.set(result.id, {
       buyer_name,
       buyer_surname,
       buyer_email,
       buyer_phone,
       buyer_address,
       title,
-      quantity,
-      unit_price,
+      unit_price: Number(unit_price),
+      quantity: Number(quantity),
       created_at: new Date(),
     });
+
+    console.log(`✅ Preferencia creada: ${result.id} para ${buyer_email}`);
 
     res.json({
       id: result.id,
       init_point: result.init_point,
       sandbox_init_point: result.sandbox_init_point,
     });
-
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error creando preferencia" });
+    console.error("Error completo:", error);
+    res.status(500).json({
+      error: "Error creando preferencia",
+      details: error.message || error,
+    });
   }
 };
 
@@ -84,7 +81,7 @@ export const handleWebhook = async (req, res) => {
     console.log('Body:', req.body);
 
     let paymentId = null;
-
+    
     if (req.body.type === 'payment' && req.body.data?.id) {
       paymentId = req.body.data.id;
       console.log('✅ Webhook v1 detectado - Payment ID:', paymentId);
@@ -139,6 +136,32 @@ export const handleWebhook = async (req, res) => {
           margin: auto;
           line-height: 1.6;
         `;
+
+        // Email al cliente
+        try {
+          await resend.emails.send({
+            from: 'Nuno Deportes <onboarding@resend.dev>',
+            to: buyerEmail,
+            subject: 'Confirmación de compra - Nuno Deportes',
+            html: `
+              <div style="${baseStyle}">
+                <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">¡Gracias por tu compra, ${buyerName}!</h2>
+                <p>Recibimos tu pago correctamente y estamos procesando tu pedido.</p>
+                <div style="margin-top: 20px;">
+                  <p><strong>Producto:</strong> ${productTitle}</p>
+                  <p><strong>Cantidad:</strong> ${quantity}</p>
+                  <p><strong>Total abonado:</strong> $${totalAmount} ARS</p>
+                </div>
+                <hr style="border: 1px solid #000; margin: 20px 0;">
+                <p>Nos pondremos en contacto contigo pronto para coordinar el envío.</p>
+                <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
+              </div>
+            `,
+          });
+          console.log(`✅ Correo de confirmación enviado a ${buyerEmail}`);
+        } catch (emailError) {
+          console.error('❌ Error enviando email al cliente:', emailError);
+        }
 
         // Email para la tienda
         try {
