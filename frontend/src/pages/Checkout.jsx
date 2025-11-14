@@ -21,6 +21,8 @@ const Checkout = () => {
         buyer_email: data.email,
         buyer_address: data.address,
         buyer_phone: data.phone,
+        buyer_name: data.name,
+        buyer_surname: data.surname,
       });
       window.location.href = response.data.init_point;
     } catch (error) {
@@ -30,10 +32,10 @@ const Checkout = () => {
 
   return (
     <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center p-4 containerCheckout">
-      
+
       <div className="w-[360px] md:w-[720px] lg:w-[960px] bg-white rounded-xl shadow-xl p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
 
-      
+
         <div className="flex flex-col items-center gap-3">
           {loading && productById._id === 0 ? (
             <p className="text-center text-[20px]">Cargando...</p>
@@ -57,7 +59,7 @@ const Checkout = () => {
           </div>
         </div>
 
-    
+
         <div className="w-full flex flex-col">
           <h2 className="text-[20px] font-semibold mb-3 bg-blue-600 text-white p-3 text-center">Finalización de compra</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
