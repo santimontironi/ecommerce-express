@@ -1,67 +1,51 @@
-import mercadopago from "mercadopago";
-import { Resend } from "resend";
-
-mercadopago.configure({
-  access_token: process.env.ACCESS_TOKEN,
-});
+import { Preference, Payment } from 'mercadopago';
+import client from '../config/mercadopago.js';
+import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Mapa para guardar datos temporales
+// Objeto temporal para guardar datos de preferencias
+// En producción, esto debería estar en una base de datos
 const pendingOrders = new Map();
 
-/* ======================================================
-   1) CREAR PREFERENCIA Y GUARDAR DATOS
-====================================================== */
 export const createPreference = async (req, res) => {
   try {
-    const {
-      title,
-      unit_price,
-      quantity,
-      buyer_name,
-      buyer_surname,
-      buyer_email,
-      buyer_phone,
-      buyer_address,
-    } = req.body;
+    const { title, unit_price, quantity, buyer_email, buyer_address, buyer_phone, buyer_name, buyer_surname } = req.body;
 
-    // Armar preferencia sin external_reference primero
-    const preferenceData = {
-      items: [
-        {
-          title,
-          unit_price: Number(unit_price),
-          quantity: Number(quantity),
-          currency_id: "ARS",
+    const preference = new Preference(client);
+
+    const result = await preference.create({
+      body: {
+        items: [
+          {
+            title,
+            unit_price: Number(unit_price),
+            quantity: Number(quantity),
+            currency_id: "ARS",
+          },
+        ],
+        payer: {
+          email: buyer_email,
+          phone: {
+            area_code: "",
+            number: String(buyer_phone),
+          },
+          address: {
+            street_name: buyer_address,
+          },
         },
-      ],
-      payer: {
-        email: buyer_email,
-        phone: {
-          area_code: "",
-          number: String(buyer_phone),
+        back_urls: {
+          success: "https://nunodeportes.netlify.app/pay-correct",
+          failure: "https://nunodeportes.netlify.app/pay-fail",
+          pending: "https://nunodeportes.netlify.app/pay-pending",
         },
-        address: {
-          street_name: buyer_address,
-        },
+        auto_return: "approved",
+        notification_url: "https://nunodeportes.vercel.app/webhook",
       },
-      back_urls: {
-        success: "https://nunodeportes.netlify.app/pay-correct",
-        failure: "https://nunodeportes.netlify.app/pay-fail",
-        pending: "https://nunodeportes.netlify.app/pay-pending",
-      },
-      auto_return: "approved",
-      notification_url: "https://nunodeportes.vercel.app/webhook",
-    };
+    });
 
-    // Crear preferencia
-    const result = await mercadopago.preferences.create(preferenceData);
-
-    const prefId = result.body.id;
-
-    // Guardar datos antes del pago
-    pendingOrders.set(prefId, {
+    // Guardar datos del comprador asociados al preference_id (DESPUÉS de crear)
+    pendingOrders.set(result.id, {
       buyer_name,
       buyer_surname,
       buyer_email,
@@ -73,106 +57,148 @@ export const createPreference = async (req, res) => {
       created_at: new Date(),
     });
 
-    // Ahora sí agregar external_reference
-    await mercadopago.preferences.update({
-      id: prefId,
-      body: {
-        external_reference: prefId,
-      },
-    });
+    console.log(`✅ Preferencia creada: ${result.id} para ${buyer_email}`);
 
-    return res.json({ id: prefId });
+    res.json({
+      id: result.id,
+      init_point: result.init_point,
+      sandbox_init_point: result.sandbox_init_point,
+    });
   } catch (error) {
-    console.error("Error crear preferencia:", error);
-    return res.status(500).json({ error: "Error creating preference" });
+    console.error("Error completo:", error);
+    res.status(500).json({
+      error: "Error creando preferencia",
+      details: error.message || error,
+    });
   }
 };
 
-/* ======================================================
-   2) WEBHOOK
-====================================================== */
 export const handleWebhook = async (req, res) => {
   try {
-    console.log("Webhook recibido:", req.body);
+    console.log('Query params:', req.query);
+    console.log('Body:', req.body);
 
-    if (req.body.type !== "payment") {
+    let paymentId = null;
+    
+    if (req.body.type === 'payment' && req.body.data?.id) {
+      paymentId = req.body.data.id;
+      console.log('✅ Webhook v1 detectado - Payment ID:', paymentId);
+    }
+    else if (req.query.topic === 'payment' && req.query.id) {
+      paymentId = req.query.id;
+      console.log('✅ Webhook v0 detectado - Payment ID:', paymentId);
+    }
+    else {
+      console.log('ℹ️ Webhook ignorado (no es payment o falta ID)');
       return res.sendStatus(200);
     }
 
-    const paymentId = req.body.data.id;
+    if (paymentId) {
+      const payment = new Payment(client);
+      const paymentData = await payment.get({ id: paymentId });
 
-    const payment = await mercadopago.payment.findById(paymentId);
-    const paymentData = payment.body;
+      console.log('Estado del pago:', paymentData.status);
+      console.log('Payment data completo:', JSON.stringify(paymentData, null, 2));
 
-    const preferenceId = paymentData.external_reference;
+      if (paymentData.status === 'approved') {
+        // Intentar obtener datos guardados
+        const preferenceId = paymentData.external_reference;
+        const savedData = pendingOrders.get(preferenceId);
 
-    console.log("external_reference:", preferenceId);
+        // Datos del pago (de MercadoPago)
+        const buyerEmailFromMP = paymentData.payer?.email;
+        const buyerNameFromMP = paymentData.payer?.first_name || paymentData.payer?.name || 'Cliente';
+        const productTitle = paymentData.description || 'Producto';
+        const totalAmount = paymentData.transaction_amount || 0;
 
-    const savedData = pendingOrders.get(preferenceId);
+        // Usar datos guardados (del formulario) o fallback de MercadoPago
+        const buyerEmail = savedData?.buyer_email || buyerEmailFromMP;
+        const buyerName = savedData ? `${savedData.buyer_name} ${savedData.buyer_surname}` : buyerNameFromMP;
+        const buyerPhone = savedData?.buyer_phone || paymentData.payer?.phone?.number || 'No proporcionado';
+        const buyerAddress = savedData?.buyer_address || paymentData.additional_info?.payer?.address?.street_name || 'No proporcionada';
+        const quantity = savedData?.quantity || paymentData.additional_info?.items?.[0]?.quantity || 1;
 
-    if (!savedData) {
-      console.log("⚠ No se encontraron datos en pendingOrders.");
-      return res.sendStatus(200);
+        console.log('📧 Datos del comprador:');
+        console.log('- Email:', buyerEmail);
+        console.log('- Teléfono:', buyerPhone);
+        console.log('- Dirección:', buyerAddress);
+
+        const baseStyle = `
+          font-family: 'Arial', sans-serif;
+          color: #000;
+          background-color: #fff;
+          border: 1px solid #000;
+          border-radius: 10px;
+          padding: 24px;
+          max-width: 600px;
+          margin: auto;
+          line-height: 1.6;
+        `;
+
+        // Email al cliente
+        try {
+          await resend.emails.send({
+            from: 'Nuno Deportes <onboarding@resend.dev>',
+            to: buyerEmail,
+            subject: 'Confirmación de compra - Nuno Deportes',
+            html: `
+              <div style="${baseStyle}">
+                <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">¡Gracias por tu compra, ${buyerName}!</h2>
+                <p>Recibimos tu pago correctamente y estamos procesando tu pedido.</p>
+                <div style="margin-top: 20px;">
+                  <p><strong>Producto:</strong> ${productTitle}</p>
+                  <p><strong>Cantidad:</strong> ${quantity}</p>
+                  <p><strong>Total abonado:</strong> $${totalAmount} ARS</p>
+                </div>
+                <hr style="border: 1px solid #000; margin: 20px 0;">
+                <p>Nos pondremos en contacto contigo pronto para coordinar el envío.</p>
+                <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
+              </div>
+            `,
+          });
+          console.log(`✅ Correo de confirmación enviado a ${buyerEmail}`);
+        } catch (emailError) {
+          console.error('❌ Error enviando email al cliente:', emailError);
+        }
+
+        // Email para la tienda
+        try {
+          await resend.emails.send({
+            from: 'Nuno Deportes <onboarding@resend.dev>',
+            to: 'brunoborlo3@gmail.com',
+            subject: `🛒 Nueva venta - ${productTitle}`,
+            html: `
+              <div style="${baseStyle}">
+                <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">Nueva compra confirmada</h2>
+                <p><strong>Nombre:</strong> ${buyerName}</p>
+                <p><strong>Email cliente:</strong> ${buyerEmail}</p>
+                <p><strong>Teléfono:</strong> ${buyerPhone}</p>
+                <p><strong>Dirección:</strong> ${buyerAddress}</p>
+                <p><strong>Producto:</strong> ${productTitle}</p>
+                <p><strong>Cantidad:</strong> ${quantity}</p>
+                <p><strong>Total:</strong> $${totalAmount} ARS</p>
+                <hr style="border: 1px solid #000; margin: 20px 0;">
+                <p>Verificá el pedido y prepará el envío.</p>
+                <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
+              </div>
+            `,
+          });
+          console.log('✅ Notificación de venta enviada al correo de la tienda.');
+        } catch (emailError) {
+          console.error('❌ Error enviando email a la tienda:', emailError);
+        }
+
+        // Limpiar datos guardados después de usarlos
+        if (savedData) {
+          pendingOrders.delete(preferenceId);
+          console.log(`🗑️ Datos de preferencia ${preferenceId} eliminados`);
+        }
+      }
     }
 
-    const {
-      buyer_name,
-      buyer_surname,
-      buyer_email,
-      buyer_phone,
-      buyer_address,
-      title,
-      unit_price,
-      quantity,
-      created_at,
-    } = savedData;
-
-    // Datos reales del pago
-    const totalPagado = paymentData.transaction_amount;
-    const paymentStatus = paymentData.status;
-    const paymentDetail = paymentData.status_detail;
-
-    /* ======================================================
-       3) ENVIAR EMAIL CON RESEND
-    ====================================================== */
-    await resend.emails.send({
-      from: "Nuño Deportes <onboarding@resend.dev>",
-      to: "nunodeportesservicio@gmail.com",
-      subject: "Nueva compra confirmada",
-      html: `
-        <h2>Nueva compra confirmada</h2>
-
-        <h3>Datos del comprador</h3>
-        <p><strong>Nombre:</strong> ${buyer_name} ${buyer_surname}</p>
-        <p><strong>Email:</strong> ${buyer_email}</p>
-        <p><strong>Teléfono:</strong> ${buyer_phone}</p>
-        <p><strong>Dirección:</strong> ${buyer_address}</p>
-
-        <h3>Producto</h3>
-        <p><strong>Producto:</strong> ${title}</p>
-        <p><strong>Cantidad:</strong> ${quantity}</p>
-        <p><strong>Precio unitario:</strong> $${unit_price}</p>
-
-        <h3>Pago</h3>
-        <p><strong>Total pagado:</strong> $${totalPagado}</p>
-        <p><strong>Estado:</strong> ${paymentStatus}</p>
-        <p><strong>Detalle:</strong> ${paymentDetail}</p>
-
-        <h3>Información técnica</h3>
-        <p><strong>Payment ID:</strong> ${paymentId}</p>
-        <p><strong>Preference ID:</strong> ${preferenceId}</p>
-        <p><strong>Fecha de creación:</strong> ${created_at}</p>
-      `,
-    });
-
-    console.log("📩 Email enviado correctamente.");
-
-    // Eliminar datos del Map
-    pendingOrders.delete(preferenceId);
-
-    return res.sendStatus(200);
+    res.sendStatus(200);
   } catch (error) {
-    console.error("Error webhook:", error);
-    return res.sendStatus(200);
+    console.error('❌ Error en webhook:', error);
+    res.sendStatus(200);
   }
 };
