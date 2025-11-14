@@ -11,7 +11,7 @@ const pendingOrders = new Map();
 
 export const createPreference = async (req, res) => {
   try {
-    const { 
+    const {
       title, unit_price, quantity,
       buyer_email, buyer_address, buyer_phone,
       buyer_name, buyer_surname
@@ -43,11 +43,16 @@ export const createPreference = async (req, res) => {
           },
         },
         back_urls: {
-          success: "...",
-          failure: "...",
-          pending: "...",
+          success: "https://nunodeportes.vercel.app/pay-correct",
+          failure: "https://nunodeportes.vercel.app/pay-fail",
+          pending: "https://nunodeportes.vercel.app/pay-pending",
         },
         auto_return: "approved",
+        back_urls: {
+          success: "",
+          failure: "",
+          pending: "",
+        },
         notification_url: "https://nunodeportes.vercel.app/webhook",
         external_reference: externalRef,  // <<< AGREGADO
       },
@@ -84,7 +89,7 @@ export const handleWebhook = async (req, res) => {
     console.log('Body:', req.body);
 
     let paymentId = null;
-    
+
     if (req.body.type === 'payment' && req.body.data?.id) {
       paymentId = req.body.data.id;
       console.log('✅ Webhook v1 detectado - Payment ID:', paymentId);
