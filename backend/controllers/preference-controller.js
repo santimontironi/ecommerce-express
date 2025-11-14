@@ -41,12 +41,10 @@ export const createPreference = async (req, res) => {
         },
         auto_return: "approved",
         notification_url: "https://nunodeportes.vercel.app/webhook",
-        // Agregar external_reference para vincular datos
-        external_reference: result.id || Date.now().toString(),
       },
     });
 
-    // Guardar datos del comprador asociados al preference_id
+    // Guardar datos del comprador asociados al preference_id (DESPUÉS de crear)
     pendingOrders.set(result.id, {
       buyer_name,
       buyer_surname,
