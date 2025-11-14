@@ -48,13 +48,8 @@ export const createPreference = async (req, res) => {
           pending: "https://nunodeportes.vercel.app/pay-pending",
         },
         auto_return: "approved",
-        back_urls: {
-          success: "",
-          failure: "",
-          pending: "",
-        },
         notification_url: "https://nunodeportes.vercel.app/webhook",
-        external_reference: externalRef,  // <<< AGREGADO
+        external_reference: externalRef
       },
     });
 
