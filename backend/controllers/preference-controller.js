@@ -91,7 +91,7 @@ export const createPreference = async (req, res) => {
 /* ======================================================
    2) WEBHOOK
 ====================================================== */
-export const receiveWebhook = async (req, res) => {
+export const handleWebhook = async (req, res) => {
   try {
     console.log("Webhook recibido:", req.body);
 
