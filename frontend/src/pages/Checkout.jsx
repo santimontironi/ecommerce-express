@@ -55,7 +55,6 @@ const Checkout = () => {
             <p className="font-medium">Resumen</p>
             <p className="mt-1.5">Nombre: {productById?.name || "-"}</p>
             <p>Precio unitario: ${productById?.price ?? "-"}</p>
-            <p>Stock disponible: {productById?.stock ?? "-"}</p>
           </div>
         </div>
 

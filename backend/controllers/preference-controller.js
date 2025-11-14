@@ -56,8 +56,19 @@ export const createPreference = async (req, res) => {
 
 export const handleWebhook = async (req, res) => {
   try {
-    const { type, data } = req.query;
+    // MercadoPago puede enviar datos en query params O en body
+    const type = req.query.type || req.body.type;
+    const data = req.query.data || req.body.data;
+    
     console.log('Webhook recibido - Type:', type, 'Data:', data);
+    console.log('Query params:', req.query);
+    console.log('Body:', req.body);
+
+    // Validación: si no hay data, respondemos OK pero no procesamos
+    if (!data || !data.id) {
+      console.log('Webhook sin data.id, ignorando...');
+      return res.sendStatus(200);
+    }
 
     if (type === 'payment') {
       const paymentId = data.id;
@@ -88,6 +99,7 @@ export const handleWebhook = async (req, res) => {
           line-height: 1.6;
         `;
 
+        // Email al cliente
         await resend.emails.send({
           from: 'Nuno Deportes <onboarding@resend.dev>',
           to: buyerEmail,
@@ -110,10 +122,10 @@ export const handleWebhook = async (req, res) => {
 
         console.log(`Correo de confirmación enviado a ${buyerEmail}`);
 
-        // 🏪 Email para la tienda
+        // Email para la tienda
         await resend.emails.send({
           from: 'Nuno Deportes <onboarding@resend.dev>',
-          to: 'brunoborlo3@gmail.com', // o process.env.SMTP_USER si querés mantenerlo dinámico
+          to: 'brunoborlo3@gmail.com',
           subject: `🛒 Nueva venta - ${productTitle}`,
           html: `
             <div style="${baseStyle}">
@@ -139,6 +151,7 @@ export const handleWebhook = async (req, res) => {
     res.sendStatus(200);
   } catch (error) {
     console.error('Error en webhook:', error);
+    // Siempre responder 200 para evitar reintentos de MercadoPago
     res.sendStatus(200);
   }
 };
