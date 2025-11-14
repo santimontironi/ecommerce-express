@@ -41,12 +41,10 @@ export const createPreference = async (req, res) => {
         },
         auto_return: "approved",
         notification_url: "https://nunodeportes.vercel.app/webhook",
-        // Agregar external_reference para vincular datos
-        external_reference: result.id || Date.now().toString(),
       },
     });
 
-    // Guardar datos del comprador asociados al preference_id
+    // Guardar datos del comprador asociados al preference_id (DESPUÉS de crear)
     pendingOrders.set(result.id, {
       buyer_name,
       buyer_surname,
@@ -136,32 +134,6 @@ export const handleWebhook = async (req, res) => {
           margin: auto;
           line-height: 1.6;
         `;
-
-        // Email al cliente
-        try {
-          await resend.emails.send({
-            from: 'Nuno Deportes <onboarding@resend.dev>',
-            to: buyerEmail,
-            subject: 'Confirmación de compra - Nuno Deportes',
-            html: `
-              <div style="${baseStyle}">
-                <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">¡Gracias por tu compra, ${buyerName}!</h2>
-                <p>Recibimos tu pago correctamente y estamos procesando tu pedido.</p>
-                <div style="margin-top: 20px;">
-                  <p><strong>Producto:</strong> ${productTitle}</p>
-                  <p><strong>Cantidad:</strong> ${quantity}</p>
-                  <p><strong>Total abonado:</strong> $${totalAmount} ARS</p>
-                </div>
-                <hr style="border: 1px solid #000; margin: 20px 0;">
-                <p>Nos pondremos en contacto contigo pronto para coordinar el envío.</p>
-                <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
-              </div>
-            `,
-          });
-          console.log(`✅ Correo de confirmación enviado a ${buyerEmail}`);
-        } catch (emailError) {
-          console.error('❌ Error enviando email al cliente:', emailError);
-        }
 
         // Email para la tienda
         try {
