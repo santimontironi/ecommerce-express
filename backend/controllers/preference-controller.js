@@ -56,22 +56,29 @@ export const createPreference = async (req, res) => {
 
 export const handleWebhook = async (req, res) => {
   try {
-    // MercadoPago puede enviar datos en query params O en body
-    const type = req.query.type || req.body.type;
-    const data = req.query.data || req.body.data;
-    
-    console.log('Webhook recibido - Type:', type, 'Data:', data);
     console.log('Query params:', req.query);
     console.log('Body:', req.body);
 
-    // Validación: si no hay data, respondemos OK pero no procesamos
-    if (!data || !data.id) {
-      console.log('Webhook sin data.id, ignorando...');
+    // Manejar ambos formatos de webhook de MercadoPago
+    let paymentId = null;
+    
+    // Formato nuevo (v1): req.body.type y req.body.data.id
+    if (req.body.type === 'payment' && req.body.data?.id) {
+      paymentId = req.body.data.id;
+      console.log('✅ Webhook v1 detectado - Payment ID:', paymentId);
+    }
+    // Formato viejo (v0): req.query.topic y req.query.id
+    else if (req.query.topic === 'payment' && req.query.id) {
+      paymentId = req.query.id;
+      console.log('✅ Webhook v0 detectado - Payment ID:', paymentId);
+    }
+    // Ignorar merchant_order y otros eventos
+    else {
+      console.log('ℹ️ Webhook ignorado (no es payment o falta ID)');
       return res.sendStatus(200);
     }
 
-    if (type === 'payment') {
-      const paymentId = data.id;
+    if (paymentId) {
       const payment = new Payment(client);
       const paymentData = await payment.get({ id: paymentId });
 

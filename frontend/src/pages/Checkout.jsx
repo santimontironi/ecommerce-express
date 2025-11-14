@@ -46,7 +46,6 @@ const Checkout = () => {
                 productPrice={productById.price}
                 productImage={productById.image}
                 productDescription={productById.description}
-                productStock={productById.stock}
               />
             </div>
           )}
