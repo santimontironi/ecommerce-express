@@ -2,11 +2,15 @@ import { Preference, Payment } from 'mercadopago';
 import client from '../config/mercadopago.js';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Objeto temporal para guardar datos de preferencias
+// En producción, esto debería estar en una base de datos
+const pendingOrders = new Map();
 
 export const createPreference = async (req, res) => {
   try {
-    const { title, unit_price, quantity, buyer_email, buyer_address, buyer_phone } = req.body;
+    const { title, unit_price, quantity, buyer_email, buyer_address, buyer_phone, buyer_name, buyer_surname } = req.body;
 
     const preference = new Preference(client);
 
@@ -37,8 +41,25 @@ export const createPreference = async (req, res) => {
         },
         auto_return: "approved",
         notification_url: "https://nunodeportes.vercel.app/webhook",
+        // Agregar external_reference para vincular datos
+        external_reference: result.id || Date.now().toString(),
       },
     });
+
+    // Guardar datos del comprador asociados al preference_id
+    pendingOrders.set(result.id, {
+      buyer_name,
+      buyer_surname,
+      buyer_email,
+      buyer_phone,
+      buyer_address,
+      title,
+      unit_price: Number(unit_price),
+      quantity: Number(quantity),
+      created_at: new Date(),
+    });
+
+    console.log(`✅ Preferencia creada: ${result.id} para ${buyer_email}`);
 
     res.json({
       id: result.id,
@@ -59,20 +80,16 @@ export const handleWebhook = async (req, res) => {
     console.log('Query params:', req.query);
     console.log('Body:', req.body);
 
-    // Manejar ambos formatos de webhook de MercadoPago
     let paymentId = null;
     
-    // Formato nuevo (v1): req.body.type y req.body.data.id
     if (req.body.type === 'payment' && req.body.data?.id) {
       paymentId = req.body.data.id;
       console.log('✅ Webhook v1 detectado - Payment ID:', paymentId);
     }
-    // Formato viejo (v0): req.query.topic y req.query.id
     else if (req.query.topic === 'payment' && req.query.id) {
       paymentId = req.query.id;
       console.log('✅ Webhook v0 detectado - Payment ID:', paymentId);
     }
-    // Ignorar merchant_order y otros eventos
     else {
       console.log('ℹ️ Webhook ignorado (no es payment o falta ID)');
       return res.sendStatus(200);
@@ -83,16 +100,30 @@ export const handleWebhook = async (req, res) => {
       const paymentData = await payment.get({ id: paymentId });
 
       console.log('Estado del pago:', paymentData.status);
+      console.log('Payment data completo:', JSON.stringify(paymentData, null, 2));
 
       if (paymentData.status === 'approved') {
-        const buyerEmail = paymentData.payer?.email;
-        const buyerName = paymentData.payer?.first_name || paymentData.payer?.name || 'Cliente';
-        const buyerPhone = paymentData.payer?.phone?.number || 'No proporcionado';
-        const buyerAddress = paymentData.additional_info?.payer?.address?.street_name || 'No proporcionada';
-        const product = paymentData.additional_info?.items?.[0] || {};
-        const productTitle = product.title || 'Producto';
-        const quantity = product.quantity || 1;
+        // Intentar obtener datos guardados
+        const preferenceId = paymentData.external_reference;
+        const savedData = pendingOrders.get(preferenceId);
+
+        // Datos del pago (de MercadoPago)
+        const buyerEmailFromMP = paymentData.payer?.email;
+        const buyerNameFromMP = paymentData.payer?.first_name || paymentData.payer?.name || 'Cliente';
+        const productTitle = paymentData.description || 'Producto';
         const totalAmount = paymentData.transaction_amount || 0;
+
+        // Usar datos guardados (del formulario) o fallback de MercadoPago
+        const buyerEmail = savedData?.buyer_email || buyerEmailFromMP;
+        const buyerName = savedData ? `${savedData.buyer_name} ${savedData.buyer_surname}` : buyerNameFromMP;
+        const buyerPhone = savedData?.buyer_phone || paymentData.payer?.phone?.number || 'No proporcionado';
+        const buyerAddress = savedData?.buyer_address || paymentData.additional_info?.payer?.address?.street_name || 'No proporcionada';
+        const quantity = savedData?.quantity || paymentData.additional_info?.items?.[0]?.quantity || 1;
+
+        console.log('📧 Datos del comprador:');
+        console.log('- Email:', buyerEmail);
+        console.log('- Teléfono:', buyerPhone);
+        console.log('- Dirección:', buyerAddress);
 
         const baseStyle = `
           font-family: 'Arial', sans-serif;
@@ -107,58 +138,69 @@ export const handleWebhook = async (req, res) => {
         `;
 
         // Email al cliente
-        await resend.emails.send({
-          from: 'Nuno Deportes <onboarding@resend.dev>',
-          to: buyerEmail,
-          subject: 'Confirmación de compra - Nuno Deportes',
-          html: `
-            <div style="${baseStyle}">
-              <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">¡Gracias por tu compra, ${buyerName}!</h2>
-              <p>Recibimos tu pago correctamente y estamos procesando tu pedido.</p>
-              <div style="margin-top: 20px;">
-                <p><strong>Producto:</strong> ${productTitle}</p>
-                <p><strong>Cantidad:</strong> ${quantity}</p>
-                <p><strong>Total abonado:</strong> $${totalAmount} ARS</p>
+        try {
+          await resend.emails.send({
+            from: 'Nuno Deportes <onboarding@resend.dev>',
+            to: buyerEmail,
+            subject: 'Confirmación de compra - Nuno Deportes',
+            html: `
+              <div style="${baseStyle}">
+                <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">¡Gracias por tu compra, ${buyerName}!</h2>
+                <p>Recibimos tu pago correctamente y estamos procesando tu pedido.</p>
+                <div style="margin-top: 20px;">
+                  <p><strong>Producto:</strong> ${productTitle}</p>
+                  <p><strong>Cantidad:</strong> ${quantity}</p>
+                  <p><strong>Total abonado:</strong> $${totalAmount} ARS</p>
+                </div>
+                <hr style="border: 1px solid #000; margin: 20px 0;">
+                <p>Nos pondremos en contacto contigo pronto para coordinar el envío.</p>
+                <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
               </div>
-              <hr style="border: 1px solid #000; margin: 20px 0;">
-              <p>Nos pondremos en contacto contigo pronto para coordinar el envío.</p>
-              <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
-            </div>
-          `,
-        });
-
-        console.log(`Correo de confirmación enviado a ${buyerEmail}`);
+            `,
+          });
+          console.log(`✅ Correo de confirmación enviado a ${buyerEmail}`);
+        } catch (emailError) {
+          console.error('❌ Error enviando email al cliente:', emailError);
+        }
 
         // Email para la tienda
-        await resend.emails.send({
-          from: 'Nuno Deportes <onboarding@resend.dev>',
-          to: 'brunoborlo3@gmail.com',
-          subject: `🛒 Nueva venta - ${productTitle}`,
-          html: `
-            <div style="${baseStyle}">
-              <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">Nueva compra confirmada</h2>
-              <p><strong>Nombre:</strong> ${buyerName}</p>
-              <p><strong>Email cliente:</strong> ${buyerEmail}</p>
-              <p><strong>Teléfono:</strong> ${buyerPhone}</p>
-              <p><strong>Dirección:</strong> ${buyerAddress}</p>
-              <p><strong>Producto:</strong> ${productTitle}</p>
-              <p><strong>Cantidad:</strong> ${quantity}</p>
-              <p><strong>Total:</strong> $${totalAmount} ARS</p>
-              <hr style="border: 1px solid #000; margin: 20px 0;">
-              <p>Verificá el pedido y prepará el envío.</p>
-              <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
-            </div>
-          `,
-        });
+        try {
+          await resend.emails.send({
+            from: 'Nuno Deportes <onboarding@resend.dev>',
+            to: 'brunoborlo3@gmail.com',
+            subject: `🛒 Nueva venta - ${productTitle}`,
+            html: `
+              <div style="${baseStyle}">
+                <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">Nueva compra confirmada</h2>
+                <p><strong>Nombre:</strong> ${buyerName}</p>
+                <p><strong>Email cliente:</strong> ${buyerEmail}</p>
+                <p><strong>Teléfono:</strong> ${buyerPhone}</p>
+                <p><strong>Dirección:</strong> ${buyerAddress}</p>
+                <p><strong>Producto:</strong> ${productTitle}</p>
+                <p><strong>Cantidad:</strong> ${quantity}</p>
+                <p><strong>Total:</strong> $${totalAmount} ARS</p>
+                <hr style="border: 1px solid #000; margin: 20px 0;">
+                <p>Verificá el pedido y prepará el envío.</p>
+                <p style="margin-top: 30px; text-align:center;">🖤 <strong>Nuno Deportes</strong></p>
+              </div>
+            `,
+          });
+          console.log('✅ Notificación de venta enviada al correo de la tienda.');
+        } catch (emailError) {
+          console.error('❌ Error enviando email a la tienda:', emailError);
+        }
 
-        console.log('Notificación de venta enviada al correo de la tienda.');
+        // Limpiar datos guardados después de usarlos
+        if (savedData) {
+          pendingOrders.delete(preferenceId);
+          console.log(`🗑️ Datos de preferencia ${preferenceId} eliminados`);
+        }
       }
     }
 
     res.sendStatus(200);
   } catch (error) {
-    console.error('Error en webhook:', error);
-    // Siempre responder 200 para evitar reintentos de MercadoPago
+    console.error('❌ Error en webhook:', error);
     res.sendStatus(200);
   }
 };
