@@ -129,6 +129,9 @@ export const handleWebhook = async (req, res) => {
           ? `${savedData.buyer_name} ${savedData.buyer_surname}`
           : paymentData.payer?.first_name
           || paymentData.payer?.name
+          || paymentData.additional_info?.payer?.name
+          || paymentData.additional_info?.payer?.first_name
+          || buyerNameFromMP
           || 'Cliente';
 
         console.log('📧 Datos del comprador:');
