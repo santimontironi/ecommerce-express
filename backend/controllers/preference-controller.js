@@ -79,7 +79,7 @@ export const handleWebhook = async (req, res) => {
     console.log('Body:', req.body);
 
     let paymentId = null;
-    
+
     if (req.body.type === 'payment' && req.body.data?.id) {
       paymentId = req.body.data.id;
       console.log('✅ Webhook v1 detectado - Payment ID:', paymentId);
@@ -113,10 +113,20 @@ export const handleWebhook = async (req, res) => {
 
         // Usar datos guardados (del formulario) o fallback de MercadoPago
         const buyerEmail = savedData?.buyer_email || buyerEmailFromMP;
-        const buyerName = savedData ? `${savedData.buyer_name} ${savedData.buyer_surname}` : buyerNameFromMP;
-        const buyerPhone = savedData?.buyer_phone || paymentData.payer?.phone?.number || 'No proporcionado';
-        const buyerAddress = savedData?.buyer_address || paymentData.additional_info?.payer?.address?.street_name || 'No proporcionada';
         const quantity = savedData?.quantity || paymentData.additional_info?.items?.[0]?.quantity || 1;
+        const buyerPhone = savedData?.buyer_phone
+          || paymentData.payer?.phone?.number
+          || paymentData.additional_info?.payer?.phone?.number
+          || 'No proporcionado';
+        const buyerAddress = savedData?.buyer_address
+          || paymentData.additional_info?.payer?.address?.street_name
+          || paymentData.payer?.address?.street_name
+          || 'No proporcionada';
+        const buyerName = savedData
+          ? `${savedData.buyer_name} ${savedData.buyer_surname}`
+          : paymentData.payer?.first_name
+          || paymentData.payer?.name
+          || 'Cliente';
 
         console.log('📧 Datos del comprador:');
         console.log('- Email:', buyerEmail);
