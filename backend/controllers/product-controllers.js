@@ -50,7 +50,7 @@ export const addProduct = async (req, res) => {
 
     res.status(201).json({
       message: "✅ Producto agregado correctamente",
-      product: nuevoProducto,
+      product: product,
     });
 
 
