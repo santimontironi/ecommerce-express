@@ -112,18 +112,10 @@ export const handleWebhook = async (req, res) => {
         const totalAmount = paymentData.transaction_amount || 0;
 
         // Usar datos guardados (del formulario) o fallback de MercadoPago
-        const buyerEmail = savedData?.buyer_email || buyerEmailFromMP;
-        const quantity = savedData?.quantity || paymentData.additional_info?.items?.[0]?.quantity || 1;
-
-        const buyerPhone = savedData?.buyer_phone
-          || paymentData.payer?.phone?.number
-          || paymentData.additional_info?.payer?.phone?.number
-          || 'No proporcionado';
-
-        const buyerAddress = savedData?.buyer_address
-          || paymentData.additional_info?.payer?.address?.street_name
-          || paymentData.payer?.address?.street_name
-          || 'No proporcionada';
+        const buyerEmail = buyerEmailFromMP;
+        const quantity = paymentData.additional_info?.items?.[0]?.quantity || 1;
+        const buyerPhone =  paymentData.additional_info?.payer?.phone?.number || 'No proporcionado';
+        const buyerAddress = paymentData.additional_info?.payer?.address?.street_name || 'No proporcionada';
 
         const buyerName = savedData
           ? `${savedData.buyer_name} ${savedData.buyer_surname}`
@@ -133,11 +125,6 @@ export const handleWebhook = async (req, res) => {
           || paymentData.additional_info?.payer?.first_name
           || buyerNameFromMP
           || 'Cliente';
-
-        console.log('📧 Datos del comprador:');
-        console.log('- Email:', buyerEmail);
-        console.log('- Teléfono:', buyerPhone);
-        console.log('- Dirección:', buyerAddress);
 
         const baseStyle = `
           font-family: 'Arial', sans-serif;
