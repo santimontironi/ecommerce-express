@@ -114,14 +114,17 @@ export const handleWebhook = async (req, res) => {
         // Usar datos guardados (del formulario) o fallback de MercadoPago
         const buyerEmail = savedData?.buyer_email || buyerEmailFromMP;
         const quantity = savedData?.quantity || paymentData.additional_info?.items?.[0]?.quantity || 1;
+
         const buyerPhone = savedData?.buyer_phone
           || paymentData.payer?.phone?.number
           || paymentData.additional_info?.payer?.phone?.number
           || 'No proporcionado';
+
         const buyerAddress = savedData?.buyer_address
           || paymentData.additional_info?.payer?.address?.street_name
           || paymentData.payer?.address?.street_name
           || 'No proporcionada';
+
         const buyerName = savedData
           ? `${savedData.buyer_name} ${savedData.buyer_surname}`
           : paymentData.payer?.first_name
