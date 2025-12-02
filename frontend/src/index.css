@@ -17,7 +17,9 @@ body {
 }
 
 .containerHome {
-  background: linear-gradient(to right, #101010, #3b3b3b, #101010);
+  background-image: url(./img/home.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .containerCheckout {
@@ -25,7 +27,7 @@ body {
 }
 
 .containerProductsPage{
-    background-image: url(./img/fondo5.jpg);
+    background: linear-gradient(rgba(0,0,0,0.50),rgba(0,0,0,0.50)),url(./img/fondoNavidad.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;

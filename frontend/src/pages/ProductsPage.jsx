@@ -9,7 +9,7 @@ const ProductsPage = () => {
 
   return (
     <div className="min-h-screen w-full pb-10 containerProductsPage">
-      <h1 className="text-center text-white xl:text-[50px] h-[100px] text-[24px] xl:py-8 w-full xl:h-[150px] flex items-center justify-center text-shadow-[5px_5px_10px_rgba(0,0,0,0.8)] border-b border-white">
+      <h1 className="text-center text-white text-[28px] md:text-[40px] xl:text-[50px] font-bold tracking-wide py-6 xl:py-8 w-full border-b border-white/20 bg-linear-to-b from-transparent to-white/5 shadow-[0_4px_20px_rgba(0,0,0,0.3)]backdrop-blur-smanimate-fadeIn ">
         Nuestro catálogo de productos
       </h1>
 
