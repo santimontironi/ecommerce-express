@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html{
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
 }
@@ -14,12 +18,6 @@ body {
 
 .containerAddProduct{
     background: linear-gradient(to right,#5E5E5E,#5E5E5E,#101010,#101010);
-}
-
-.containerHome {
-  background-image: url(./img/home.jpg);
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .containerCheckout {
