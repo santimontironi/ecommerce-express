@@ -3,6 +3,9 @@ import { Link as ScrollLink } from "react-scroll"
 import { Link as RouterLink } from "react-router-dom"
 
 const Footer = () => {
+
+    const actualYear = new Date().getFullYear();
+
     return (
         <footer className="w-full h-[850px] xl:h-[450px] 2xl:h-[400px] flex flex-col justify-center items-center">
 
@@ -26,7 +29,7 @@ const Footer = () => {
             </div>
 
             <div className="flex flex-col gap-5 items-center mt-5">
-                <p className="text-white text-center pt-5">© 2025 Nuno Deportes. Todos los derechos reservados.</p>
+                <p className="text-white text-center pt-5">© {actualYear} Nuno Deportes. Todos los derechos reservados.</p>
 
                 <span className="text-white text-center font-extralight text-sm">Sitio web desarrollado por <a className="text-blue-500 font-bold" href="https://github.com/santimontironi" target="_blank">Santiago Montironi</a></span>
 
