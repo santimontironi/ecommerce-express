@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
 import logo from '../img/logo.jpg'
+import { Link } from "react-router-dom"
 
 const Nav = () => {
   const [open, setOpen] = useState(false)
@@ -45,28 +45,29 @@ const Nav = () => {
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          <Link
+          <a
             className="px-5 py-2.5 rounded-xl text-gray-700 hover:text-blue-600 hover:bg-white/70 hover:shadow-md transition-all duration-300 font-medium relative overflow-hidden group"
-            to="/"
+            href="#inicio"
           >
             <span className="relative z-10">Inicio</span>
             <span className="absolute inset-0 bg-linear-to-r from-blue-50 to-blue-100 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-          </Link>
-          <Link
+          </a>
+          <a
             className="px-5 py-2.5 rounded-xl text-gray-700 hover:text-blue-600 hover:bg-white/70 hover:shadow-md transition-all duration-300 font-medium relative overflow-hidden group"
-            to="/nosotros"
+            href="#sobre-nosotros"
           >
             <span className="relative z-10">Nosotros</span>
             <span className="absolute inset-0 bg-linear-to-r from-blue-50 to-blue-100 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-          </Link>
-          <Link
+          </a>
+          <a
             className="px-5 py-2.5 rounded-xl text-gray-700 hover:text-blue-600 hover:bg-white/70 hover:shadow-md transition-all duration-300 font-medium relative overflow-hidden group"
-            to="/contacto"
+            href="#contacto"
           >
             <span className="relative z-10">Contacto</span>
             <span className="absolute inset-0 bg-linear-to-r from-blue-50 to-blue-100 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-          </Link>
+          </a>
           <Link
+            target="_blank"
             className="px-5 py-2.5 rounded-xl text-gray-700 hover:text-blue-600 hover:bg-white/70 hover:shadow-md transition-all duration-300 font-medium relative overflow-hidden group"
             to="/productos"
           >

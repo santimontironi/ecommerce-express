@@ -9,14 +9,14 @@ const Layout = () => {
   return (
     <div>
       <Nav />
-      <section id="home">
+      <section id="inicio">
         <Home />
       </section>
-      <section id="aboutus">
+      <section id="sobre-nosotros">
         <AboutUs />
       </section>
       <AdminProvider>
-        <section id="contact">
+        <section id="contacto">
           <Contact />
         </section>
 

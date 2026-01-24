@@ -31,16 +31,38 @@ const Checkout = () => {
   }
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 flex justify-center items-center p-4 containerCheckout">
+    <div className="relative w-full min-h-screen bg-linear-to-br from-gray-800 via-gray-700 to-gray-800 flex justify-center items-center p-4 py-24 overflow-hidden">
 
-      <div className="w-[360px] md:w-[720px] lg:w-[960px] bg-white rounded-xl shadow-xl p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}>
+      </div>
 
+      <div className="absolute top-0 left-0 w-96 h-96 bg-linear-to-br from-gray-600 to-gray-700 rounded-full blur-3xl opacity-20"></div>
+      <div className="absolute bottom-0 right-0 w-80 h-80 bg-linear-to-br from-gray-500 to-gray-700 rounded-full blur-3xl opacity-30"></div>
 
-        <div className="flex flex-col items-center gap-3">
+      <div className="relative z-10 w-full max-w-[360px] md:max-w-[720px] lg:max-w-[1100px] bg-linear-to-br from-gray-700/90 to-gray-800/90 backdrop-blur-sm border border-gray-600/50 rounded-3xl shadow-2xl p-6 md:p-8 lg:p-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-full text-center mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+              Tu Producto
+            </h2>
+            <div className="flex items-center justify-center gap-4 mt-4">
+              <div className="w-16 h-px bg-linear-to-r from-transparent via-gray-500 to-gray-500"></div>
+              <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+              <div className="w-16 h-px bg-linear-to-l from-transparent via-gray-500 to-gray-500"></div>
+            </div>
+          </div>
+
           {loading && productById._id === 0 ? (
-            <p className="text-center text-[20px]">Cargando...</p>
+            <div className="flex flex-col items-center justify-center gap-4 py-20">
+              <div className="w-16 h-16 border-4 border-gray-500 border-t-white rounded-full animate-spin"></div>
+              <p className="text-gray-300 text-lg">Cargando producto...</p>
+            </div>
           ) : (
-            <div className="w-[320px] md:w-[320px] lg:w-[400px]">
+            <div className="w-full max-w-[320px] mx-auto">
               <Product
                 key={productById._id}
                 id={productById._id}
@@ -52,101 +74,150 @@ const Checkout = () => {
             </div>
           )}
 
-          <div className="w-[320px] md:w-[320px] lg:w-[400px] bg-gray-100 rounded-xl p-3 text-[14px]">
-            <p className="font-medium">Resumen</p>
-            <p className="mt-1.5">Nombre: {productById?.name || "-"}</p>
-            <p>Precio unitario: ${productById?.price ?? "-"}</p>
+          <div className="w-full max-w-[320px] mx-auto bg-linear-to-br from-gray-800/80 to-gray-900/80 border border-gray-700/50 rounded-2xl p-5 shadow-lg">
+            <div className="flex items-center gap-2 mb-4">
+              <i className="bi bi-receipt text-2xl text-gray-300"></i>
+              <h3 className="text-xl font-bold text-white">Resumen de compra</h3>
+            </div>
+            <div className="space-y-2 text-gray-300">
+              <div className="flex justify-between items-center py-2 border-b border-gray-700/50">
+                <span className="text-sm">Producto:</span>
+                <span className="font-semibold text-white">{productById?.name || "-"}</span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm">Precio unitario:</span>
+                <span className="text-lg font-bold text-white">${productById?.price ?? "-"}</span>
+              </div>
+            </div>
           </div>
         </div>
 
-
         <div className="w-full flex flex-col">
-          <h2 className="text-[20px] font-semibold mb-3 bg-blue-600 text-white p-3 text-center">Finalización de compra</h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-            <div className="flex flex-col">
-              <label className="text-[13px] mb-1.5">Nombre</label>
-              <input
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                {...register("name", { required: true })}
-                placeholder="Tu nombre"
-              />
-              {errors.name && (
-                <span className="text-[12px] text-red-600 mt-1.5">
-                  El nombre es obligatorio
-                </span>
-              )}
+          <div className="mb-6 text-center lg:text-left">
+            <h2 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent mb-2">
+              Finalizar Compra
+            </h2>
+            <p className="text-gray-400">Completa tus datos para proceder al pago</p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                  <i className="bi bi-person"></i>
+                  Nombre
+                </label>
+                <input
+                  className={`px-4 py-3 rounded-xl bg-gray-700/50 text-white border ${errors.name ? 'border-red-500' : 'border-gray-600/50'
+                    } focus:outline-none focus:border-gray-400 focus:bg-gray-700 transition-all duration-300`}
+                  {...register("name", { required: true })}
+                  placeholder="Tu nombre"
+                />
+                {errors.name && (
+                  <span className="text-red-400 text-xs mt-2 flex items-center gap-1">
+                    <i className="bi bi-exclamation-circle"></i>
+                    El nombre es obligatorio
+                  </span>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                  <i className="bi bi-person"></i>
+                  Apellido
+                </label>
+                <input
+                  className={`px-4 py-3 rounded-xl bg-gray-700/50 text-white border ${errors.surname ? 'border-red-500' : 'border-gray-600/50'
+                    } focus:outline-none focus:border-gray-400 focus:bg-gray-700 transition-all duration-300`}
+                  {...register("surname", { required: true })}
+                  placeholder="Tu apellido"
+                />
+                {errors.surname && (
+                  <span className="text-red-400 text-xs mt-2 flex items-center gap-1">
+                    <i className="bi bi-exclamation-circle"></i>
+                    El apellido es obligatorio
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="flex flex-col">
-              <label className="text-[13px] mb-1.5">Apellido</label>
-              <input
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                {...register("surname", { required: true })}
-                placeholder="Tu apellido"
-              />
-              {errors.surname && (
-                <span className="text-[12px] text-red-600 mt-1.5">
-                  El apellido es obligatorio
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-[13px] mb-1.5">Email</label>
+              <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                <i className="bi bi-envelope"></i>
+                Email
+              </label>
               <input
                 type="email"
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className={`px-4 py-3 rounded-xl bg-gray-700/50 text-white border ${errors.email ? 'border-red-500' : 'border-gray-600/50'
+                  } focus:outline-none focus:border-gray-400 focus:bg-gray-700 transition-all duration-300`}
                 {...register("email", { required: true })}
-                placeholder="Tu email"
+                placeholder="ejemplo@correo.com"
               />
               {errors.email && (
-                <span className="text-[12px] text-red-600 mt-1.5">
+                <span className="text-red-400 text-xs mt-2 flex items-center gap-1">
+                  <i className="bi bi-exclamation-circle"></i>
                   El email es obligatorio
                 </span>
               )}
             </div>
 
             <div className="flex flex-col">
-              <label className="text-[13px] mb-1.5">Teléfono</label>
+              <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                <i className="bi bi-telephone"></i>
+                Teléfono
+              </label>
               <input
                 type="text"
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className={`px-4 py-3 rounded-xl bg-gray-700/50 text-white border ${errors.phone ? 'border-red-500' : 'border-gray-600/50'
+                  } focus:outline-none focus:border-gray-400 focus:bg-gray-700 transition-all duration-300`}
                 {...register("phone", { required: true })}
-                placeholder="Tu teléfono"
+                placeholder="+54 123 456 7890"
               />
               {errors.phone && (
-                <span className="text-[12px] text-red-600 mt-1.5">
-                  El número de teléfono es obligatorio
+                <span className="text-red-400 text-xs mt-2 flex items-center gap-1">
+                  <i className="bi bi-exclamation-circle"></i>
+                  El teléfono es obligatorio
                 </span>
               )}
             </div>
 
             <div className="flex flex-col">
-              <label className="text-[13px] mb-1.5">Dirección</label>
+              <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                <i className="bi bi-geo-alt"></i>
+                Dirección
+              </label>
               <input
                 type="text"
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className={`px-4 py-3 rounded-xl bg-gray-700/50 text-white border ${errors.address ? 'border-red-500' : 'border-gray-600/50'
+                  } focus:outline-none focus:border-gray-400 focus:bg-gray-700 transition-all duration-300`}
                 {...register("address", { required: true })}
-                placeholder="Tu dirección"
+                placeholder="Calle, número, ciudad"
               />
               {errors.address && (
-                <span className="text-[12px] text-red-600 mt-1.5">
+                <span className="text-red-400 text-xs mt-2 flex items-center gap-1">
+                  <i className="bi bi-exclamation-circle"></i>
                   La dirección es obligatoria
                 </span>
               )}
             </div>
 
             <div className="flex flex-col">
-              <label className="text-[13px] mb-1.5">Cantidad</label>
+              <label className="text-sm font-semibold text-gray-300 mb-2 flex items-center gap-2">
+                <i className="bi bi-cart"></i>
+                Cantidad
+              </label>
               <input
                 type="number"
                 min={1}
-                className="h-11 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className={`px-4 py-3 rounded-xl bg-gray-700/50 text-white border ${errors.quantity ? 'border-red-500' : 'border-gray-600/50'
+                  } focus:outline-none focus:border-gray-400 focus:bg-gray-700 transition-all duration-300`}
                 {...register("quantity", { required: true })}
-                placeholder="Cantidad a comprar"
+                placeholder="1"
               />
               {errors.quantity && (
-                <span className="text-[12px] text-red-600 mt-1.5">
+                <span className="text-red-400 text-xs mt-2 flex items-center gap-1">
+                  <i className="bi bi-exclamation-circle"></i>
                   La cantidad es obligatoria
                 </span>
               )}
@@ -154,9 +225,12 @@ const Checkout = () => {
 
             <button
               type="submit"
-              className="h-11 mt-1.5 bg-blue-600 text-white font-medium text-[16px] rounded-lg hover:opacity-95 transition-opacity cursor-pointer"
+              className="group mt-4 px-8 py-4 bg-linear-to-r from-white to-gray-200 text-black font-bold text-lg uppercase tracking-wide rounded-xl hover:from-gray-100 hover:to-gray-300 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:scale-95"
             >
-              Pagar
+              <span className="flex items-center justify-center gap-3">
+                Proceder al Pago
+                <i className="bi bi-credit-card text-xl group-hover:scale-110 transition-transform"></i>
+              </span>
             </button>
           </form>
         </div>
