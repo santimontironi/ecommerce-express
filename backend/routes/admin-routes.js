@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginAdmin, dashboardAdmin, logoutAdmin, createAdmin } from "../controllers/admin-controllers.js";
+import { loginAdmin, dashboardAdmin, logoutAdmin } from "../controllers/admin-controllers.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 
 export const router = Router();
