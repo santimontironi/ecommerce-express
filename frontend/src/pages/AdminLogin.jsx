@@ -33,11 +33,18 @@ const AdminLogin = () => {
   }, [admin, navigate]);
 
   return (
-    <main className="flex min-h-svh flex-col bg-soft px-4 py-6 md:px-8">
+    <main className="relative isolate flex min-h-svh flex-col overflow-hidden bg-soft px-4 py-6 md:px-8">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(#d4d4d0_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+        <div className="absolute -top-32 -left-24 size-96 rounded-full bg-accent/25 blur-3xl" />
+        <div className="absolute -right-24 -bottom-32 size-96 rounded-full bg-indigo-400/25 blur-3xl" />
+      </div>
+
       <GoBack url="/" className="self-start" />
 
       <div className="my-auto w-full max-w-md self-center py-10">
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="card flex flex-col gap-5 p-6 md:p-10">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="card relative flex flex-col gap-5 overflow-hidden bg-white/85 p-6 shadow-xl shadow-ink/5 backdrop-blur md:p-10">
+          <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent via-indigo-500 to-accent" />
           <div className="text-center">
             <Logo className="mx-auto size-14" />
             <h1 className="mt-5 text-2xl font-bold tracking-tight">Ingreso de administrador</h1>
