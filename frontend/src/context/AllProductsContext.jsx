@@ -1,8 +1,8 @@
-import { createContext, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
+import { AllProductsContext } from "../hooks/useAllProducts";
 import { products } from "../api/api";
 import { Outlet } from "react-router-dom";
 
-export const AllProductsContext = createContext();
 
 export const AllProductsProvider = () => {
 
@@ -17,7 +17,7 @@ export const AllProductsProvider = () => {
             try{
                 const res = await products();
 
-                setAllProducts(res.data.products);
+                setAllProducts(res.data.products ?? []);
             }
             catch(error){
                 setAllProducts([]);

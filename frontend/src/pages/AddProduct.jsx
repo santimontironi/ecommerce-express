@@ -1,20 +1,24 @@
-import { useContext, useEffect, useState } from "react"
-import { AdminContext } from "../../context/adminContext"
+import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { ImagePlus } from "lucide-react";
+import { useAdmin } from "../hooks/useAdmin"
+import AdminShell from "../components/AdminShell";
 import GoBack from "../components/GoBack";
 
 const AddProduct = () => {
 
-    const { addProduct } = useContext(AdminContext)
+    const { addProduct } = useAdmin()
 
-    const [correct, setCorrect] = useState(false);
-
-    const[errorSubmit,setErrorSubmit] = useState('')
+    const [errorSubmit, setErrorSubmit] = useState('')
 
     const navigate = useNavigate()
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm();
+
+    // ponytail: el object URL no se revoca; a lo sumo unas pocas imágenes por visita
+    const imageFile = watch("image")?.[0]
+    const preview = useMemo(() => imageFile ? URL.createObjectURL(imageFile) : null, [imageFile])
 
     async function handleForm(data) {
         const formData = new FormData()
@@ -24,96 +28,96 @@ const AddProduct = () => {
         formData.append('description', data.description)
         formData.append('price', data.price)
 
-        try{
-            setCorrect(true)
+        try {
             await addProduct(formData)
-        }
-        catch(error){
-            setErrorSubmit(error.response?.data?.message || 'Error al agregar un producto')
-            setCorrect(false)
-        }
-        
-    }
-
-    useEffect(() => {
-        if(correct){
             navigate('/admin')
         }
-    },[correct])
-
-
+        catch (error) {
+            setErrorSubmit(error.response?.data?.message || 'Error al agregar un producto')
+        }
+    }
 
     return (
-        <div className="containerAddProduct min-h-screen w-full bg-gray-50 flex items-center justify-center px-4 py-8 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
+        <AdminShell title="Nuevo producto" subtitle="Completá los datos para publicarlo en la tienda." actions={<GoBack url="/admin" />}>
 
-            <GoBack url="/admin" />
-            
+            <form method="post" onSubmit={handleSubmit(handleForm)} noValidate className="grid items-start gap-5 xl:grid-cols-12">
 
-            <form method="post" onSubmit={handleSubmit(handleForm)} className="w-full max-w-[400px] sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-[900px] bg-white p-6 rounded-lg shadow-lg">
-
-                <h1 className="text-center text-2xl mb-4 bg-black text-white p-3 rounded-lg">Nuevo producto</h1>
-
-                <div className="flex flex-col mb-4">
-                    <label htmlFor="Imagen" className="text-[16px] font-semibold text-gray-700 mb-2">Imagen</label>
-                    <input
-                        {...register("image", { required: true })}
-                        type="file"
-                        id="imagen"
-                        name="image"
-                        accept="image/*"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {errors.image && <span className="text-[14px] text-red-600 mt-1">La imagen es requerida</span>}
+                <div className="card p-5 md:p-6 xl:col-span-5">
+                    <span className="field-label">Imagen</span>
+                    <label
+                        htmlFor="imagen"
+                        className={`relative grid aspect-square cursor-pointer place-items-center overflow-hidden rounded-xl border-2 border-dashed bg-soft transition-colors hover:border-ink ${errors.image ? "border-red-500" : "border-line"}`}
+                    >
+                        {preview ? (
+                            <img src={preview} alt="Vista previa" className="absolute inset-0 size-full object-cover" />
+                        ) : (
+                            <span className="flex flex-col items-center gap-3 px-6 text-center text-mute">
+                                <ImagePlus size={28} strokeWidth={1.5} />
+                                <span className="text-sm">Hacé click para subir una foto</span>
+                            </span>
+                        )}
+                        <input
+                            {...register("image", { required: true })}
+                            type="file"
+                            id="imagen"
+                            accept="image/*"
+                            className="sr-only"
+                        />
+                    </label>
+                    {errors.image && <span className="field-error">La imagen es requerida</span>}
                 </div>
 
-                <div className="flex flex-col mb-4">
-                    <label htmlFor="Titulo" className="text-[16px] font-semibold text-gray-700 mb-2">Titulo</label>
-                    <input
-                        {...register("name", { required: true })}
-                        type="text"
-                        id="titulo"
-                        name="name"
-                        placeholder="Titulo"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {errors.name && <span className="text-[14px] text-red-600 mt-1">El titulo es requerido</span>}
-                </div>
+                <div className="card flex flex-col gap-5 p-5 md:p-6 xl:col-span-7">
+                    <div>
+                        <label htmlFor="titulo" className="field-label">Título</label>
+                        <input
+                            {...register("name", { required: true })}
+                            type="text"
+                            id="titulo"
+                            placeholder="Ej: Remera dry-fit"
+                            aria-invalid={errors.name ? "true" : "false"}
+                            className="field"
+                        />
+                        {errors.name && <span className="field-error">El título es requerido</span>}
+                    </div>
 
-                <div className="flex flex-col mb-4">
-                    <label htmlFor="Descripcion" className="text-[16px] font-semibold text-gray-700 mb-2">Descripcion</label>
-                    <input
-                        {...register("description", { required: true })}
-                        type="text"
-                        id="descripcion"
-                        name="description"
-                        placeholder="Descripcion"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {errors.description && <span className="text-[14px] text-red-600 mt-1">La descripcion es requerida</span>}
-                </div>
+                    <div>
+                        <label htmlFor="descripcion" className="field-label">Descripción</label>
+                        <textarea
+                            {...register("description", { required: true })}
+                            id="descripcion"
+                            rows="4"
+                            placeholder="Material, talles, colores…"
+                            aria-invalid={errors.description ? "true" : "false"}
+                            className="field resize-none"
+                        />
+                        {errors.description && <span className="field-error">La descripción es requerida</span>}
+                    </div>
 
-                <div className="flex flex-col mb-4">
-                    <label htmlFor="Precio" className="text-4 font-semibold text-gray-700 mb-2">Precio</label>
-                    <input
-                        {...register("price", { required: true })}
-                        type="number"
-                        id="precio"
-                        name="price"
-                        placeholder="Precio"
-                        className="w-full h-10 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {errors.price && <span className="text-[14px] text-red-600 mt-1">El precio es requerido</span>}
-                </div>
+                    <div>
+                        <label htmlFor="precio" className="field-label">Precio (ARS)</label>
+                        <input
+                            {...register("price", { required: true })}
+                            type="number"
+                            min={0}
+                            id="precio"
+                            placeholder="0"
+                            aria-invalid={errors.price ? "true" : "false"}
+                            className="field"
+                        />
+                        {errors.price && <span className="field-error">El precio es requerido</span>}
+                    </div>
 
-                <div className="flex justify-center">
-                    <button type="submit" className="w-full sm:w-[200px] md:w-[250px] lg:w-[300px] xl:w-[350px] 2xl:w-[400px] h-12 bg-blue-600 text-white text-[16px] font-semibold rounded-1 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">Agregar producto</button>
+                    <div className="flex flex-col gap-4 border-t border-line pt-5 md:flex-row md:items-center">
+                        <button type="submit" disabled={isSubmitting} className="btn btn-dark">
+                            {isSubmitting ? "Guardando…" : "Agregar producto"}
+                        </button>
+                        {errorSubmit && <p role="alert" className="text-sm text-red-600">{errorSubmit}</p>}
+                    </div>
                 </div>
 
             </form>
-
-            {errorSubmit && <span className="text-[14px] text-red-600 mt-1">{errorSubmit}</span>}
-
-        </div>
+        </AdminShell>
     )
 }
 

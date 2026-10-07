@@ -1,14 +1,14 @@
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { ProductByIdContext } from "../hooks/useProductById";
 import { useParams } from "react-router-dom";
 import { getProductByIdApi } from "../api/api";
 import { Outlet } from "react-router-dom";
 
-export const ProductByIdContext = createContext();
 
 export const ProductByIdProvider = () => {
 
     const [productById, setProductById] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const { id } = useParams();
 
@@ -19,9 +19,9 @@ export const ProductByIdProvider = () => {
                 const res = await getProductByIdApi(id);
                 setProductById(res.data.product);
             }
-            catch(error){
+            catch{
+                // Producto borrado o id inválido: el checkout muestra "no disponible"
                 setProductById({});
-                throw error
             }
             finally{
                 setTimeout(() => {

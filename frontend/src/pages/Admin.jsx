@@ -1,62 +1,46 @@
 import { Link } from "react-router-dom"
-import { useContext } from "react"
-import { AdminContext } from "../../context/adminContext"
-import ProductsAdmin from "./ProductsAdmin"
-import Loader from "../components/Loader"
+import { Plus, Package, TrendingUp, Tag, Clock } from "lucide-react"
+import { useAdmin } from "../hooks/useAdmin"
+import AdminShell from "../components/AdminShell"
+import AdminProductList from "../components/AdminProductList"
+import { formatPrice } from "../utils/formatPrice"
 
 const Admin = () => {
 
-  const { dashboardLoading, logoutAdmin, products } = useContext(AdminContext)
+  const { products = [], admin } = useAdmin()
+
+  const prices = products.map((p) => Number(p.price) || 0)
+  const stats = [
+    { icon: Package, label: "Productos", value: products.length },
+    { icon: TrendingUp, label: "Precio promedio", value: formatPrice(prices.length ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : 0) },
+    { icon: Tag, label: "Precio más alto", value: formatPrice(prices.length ? Math.max(...prices) : 0) },
+    { icon: Clock, label: "Último agregado", value: products.at(-1)?.name || "—" },
+  ]
 
   return (
-    <div className="min-h-screen w-full containerAdmin flex flex-col items-center justify-center py-10">
-
-      {dashboardLoading ? <Loader /> : (
-        <>
-          <div className="flex flex-col items-center justify-center bg-gray-300 text-center mx-auto
-            w-[320px] h-[400px]
-            md:w-[640px] md:h-[480px]
-            lg:w-[800px] lg:h-[520px]
-            xl:w-[960px] xl:h-[560px]
-            2xl:w-[1100px] 2xl:h-[600px]
-            rounded-2xl p-6 shadow-[5px_5px_20px_rgba(0,0,0,0.8)] relative">
-
-            <h1 className="text-2xl sm:text-3xl md:text-4xl text-gray-800 mb-8 font-bold">
-              Panel de administrador
-            </h1>
-
-            <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-[600px] mb-10">
-              Desde este panel podés gestionar los productos del catálogo, agregar nuevos artículos y mantener
-              actualizada la información de tu tienda.
-            </p>
-
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-              <Link to="/agregar-producto" className="bg-blue-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl 
-            hover:bg-blue-700 active:scale-95 transition-transform duration-200 cursor-pointer">
-                Agregar producto
-              </Link>
-
-              <Link to="/">
-                <button onClick={() => logoutAdmin()} className="bg-red-600 text-white font-medium text-base sm:text-lg py-3 px-8 rounded-xl 
-              hover:bg-red-700 active:scale-95 transition-transform duration-200 cursor-pointer">
-                  Cerrar sesión
-                </button>
-              </Link>
-            </div>
-
+    <AdminShell
+      title={`Hola, ${admin?.username || "admin"}`}
+      subtitle="Gestioná los productos del catálogo de tu tienda."
+      actions={<Link to="/agregar-producto" className="btn btn-dark"><Plus size={16} /> Agregar producto</Link>}
+    >
+      <dl className="grid grid-cols-2 gap-3 md:gap-4 xl:grid-cols-4">
+        {stats.map(({ icon: Icon, label, value }) => (
+          <div key={label} className="card min-w-0 p-4 md:p-5">
+            <dt className="flex items-center gap-2 text-sm text-mute">
+              <span className="grid size-8 place-items-center rounded-full bg-soft text-ink"><Icon size={15} /></span>
+              {label}
+            </dt>
+            <dd className="mt-4 truncate text-xl font-bold md:text-2xl">{value}</dd>
           </div>
+        ))}
+      </dl>
 
-
-          {products?.length === 0 || !products ? <h3 className="text-2xl sm:text-3xl md:text-4xl text-white bg-red-500 p-4 mt-8 font-bold rounded-xl">No hay productos agregados aún</h3> : (
-            <ProductsAdmin />
-          )}
-
-
-        </>
-
-      )}
-
-    </div>
+      <div className="mt-10 mb-4 flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Catálogo actual</h2>
+        <Link to="/admin-productos" className="text-sm font-medium text-mute hover:text-ink">Ver todo</Link>
+      </div>
+      <AdminProductList />
+    </AdminShell>
   )
 }
 

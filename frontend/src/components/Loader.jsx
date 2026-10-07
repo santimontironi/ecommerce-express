@@ -1,9 +1,7 @@
-import { BounceLoader } from "react-spinners";
-
-const Loader = () => {
+const Loader = ({ className = "min-h-[60vh]" }) => {
   return (
-    <div className="h-screen w-full flex justify-center items-center">
-        <BounceLoader color="#36d7b7" size={100} />
+    <div className={`grid w-full place-items-center ${className}`}>
+      <span role="status" aria-label="Cargando" className="size-9 animate-spin rounded-full border-2 border-current border-t-transparent opacity-50" />
     </div>
   )
 }

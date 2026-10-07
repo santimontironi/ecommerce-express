@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom"
+import { ArrowLeft } from "lucide-react"
 
-const GoBack = ({ url }) => {
+const GoBack = ({ url, className = "" }) => {
 
     const navigate = useNavigate()
 
     return (
-        <div className="absolute top-10 left-10 text-white text-2xl">
-            <button className="cursor-pointer" onClick={() => navigate(url)}><i className="bi bi-arrow-left"></i> Volver</button>
-        </div>
+        <button className={`inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-mute transition-colors hover:text-ink ${className}`} onClick={() => navigate(url)}>
+            <ArrowLeft size={16} /> Volver
+        </button>
     )
 }
 

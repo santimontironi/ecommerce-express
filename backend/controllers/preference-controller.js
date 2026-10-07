@@ -1,8 +1,6 @@
 import { Preference, Payment } from 'mercadopago';
 import client from '../config/mercadopago.js';
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import transporter, { MAIL_FROM } from '../config/mailer.js';
 
 // Objeto temporal para guardar datos de preferencias
 // En producción, esto debería estar en una base de datos
@@ -140,8 +138,8 @@ export const handleWebhook = async (req, res) => {
 
         // Email para la tienda
         try {
-          await resend.emails.send({
-            from: 'Nuno Deportes <onboarding@resend.dev>',
+          await transporter.sendMail({
+            from: MAIL_FROM,
             to: 'brunoborlo3@gmail.com',
             subject: `🛒 Nueva venta - ${productTitle}`,
             html: `

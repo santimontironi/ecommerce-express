@@ -1,15 +1,14 @@
 import { Navigate } from "react-router-dom";
-import { useContext } from "react";
-import { AdminContext } from "../../context/adminContext"
+import { useAdmin } from "../hooks/useAdmin"
 import Loader from "./Loader";
 
 const SecurityRoutes = ({children}) => {
 
-  const { admin, dashboardLoading } = useContext(AdminContext)
+  const { admin, dashboardLoading } = useAdmin()
 
   // Si todavía está verificando, no redirigir
   if (dashboardLoading) {
-    return <Loader />
+    return <Loader className="min-h-svh" />
   }
 
   // Una vez que terminó de verificar, si no hay administrador, redirigir al login

@@ -1,15 +1,13 @@
-import { Resend } from 'resend'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+import transporter, { MAIL_FROM } from '../config/mailer.js'
 
 export const sendMessage = async function (req, res) {
   try {
     const { name, email, message } = req.body
 
-    await resend.emails.send({
-      from: 'Nuno Deportes <onboarding@resend.dev>',
+    await transporter.sendMail({
+      from: MAIL_FROM,
       to: 'brunoborlo3@gmail.com',
-      reply_to: email,
+      replyTo: email,
       subject: 'Nuevo mensaje desde el formulario de contacto',
       html: `
         <div style="

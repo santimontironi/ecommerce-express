@@ -1,8 +1,8 @@
-import { createContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { AdminContext } from "../hooks/useAdmin";
 import { loginAdminApi, dashboardAdminApi, getAllProductsAdminApi, addProductApi, deleteProductApi, logoutAdminApi, sendMessageApi } from "../api/api";
 import { Outlet } from "react-router-dom";
 
-export const AdminContext = createContext();
 
 export const AdminProvider = ({children}) => {
     const [admin, setAdmin] = useState(null);
@@ -56,11 +56,8 @@ export const AdminProvider = ({children}) => {
             setProductsLoading(true);
             try {
                 const res = await getAllProductsAdminApi();
-                setProducts(res.data.products);
-            } catch (error) {
-                throw error;
-            }
-            finally{
+                setProducts(res.data.products ?? []);
+            } finally {
                 setTimeout(() => {
                     setProductsLoading(false);
                 },2000)
@@ -71,34 +68,22 @@ export const AdminProvider = ({children}) => {
 
 
     const addProduct = async (data) => {
-        try {
-            const res = await addProductApi(data);
-            if (res.data.product) {
-                setProducts((prev) => [...prev, res.data.product]);
-            }
-            return res.data;
-        } catch (error) {
-            throw error;
+        const res = await addProductApi(data);
+        if (res.data.product) {
+            setProducts((prev) => [...prev, res.data.product]);
         }
+        return res.data;
     };
 
     const deleteProduct = async (productId) => {
-        try {
-            const res = await deleteProductApi(productId);
-            return res.data;
-        } catch (error) {
-            throw error;
-        }
+        const res = await deleteProductApi(productId);
+        return res.data;
     };
 
     const logoutAdmin = async () => {
-        try {
-            const res = await logoutAdminApi();
-            setAdmin(null);
-            return res.data;
-        } catch (error) {
-            throw error;
-        }
+        const res = await logoutAdminApi();
+        setAdmin(null);
+        return res.data;
     };
 
     const sendMessage = async (data) => {
@@ -106,10 +91,7 @@ export const AdminProvider = ({children}) => {
         try {
             const res = await sendMessageApi(data);
             return res.data;
-        } catch (error) {
-            throw error;
-        }
-        finally{
+        } finally {
             setTimeout(() => {
                 setMessageLoading(false);
             },2000)

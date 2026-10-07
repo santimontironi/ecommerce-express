@@ -2,17 +2,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PayCorrect from "./pages/PayCorrect";
 import PayFail from "./pages/PayFail";
 import PayPending from "./pages/PayPending";
-import Layout from "../layout/Layout";
+import Layout from "./layout/Layout";
 import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
 import AddProduct from "./pages/AddProduct";
 import ProductsPage from "./pages/ProductsPage";
 import Checkout from "./pages/Checkout";
 import ProductsAdmin from "./pages/ProductsAdmin";
-import { AdminProvider } from "../context/adminContext";
+import { AdminProvider } from "./context/adminContext";
 import SecurityRoutes from "./components/SecurityRoutes";
-import { AllProductsProvider } from "../context/AllProductsContext";
-import { ProductByIdProvider } from "../context/ProductByIdContext";
+import { AllProductsProvider } from "./context/AllProductsContext";
+import { ProductByIdProvider } from "./context/ProductByIdContext";
 
 
 const App = () => {
@@ -21,7 +21,7 @@ const App = () => {
       <Routes>
 
         <Route path="/" element={<Layout />} />
-          
+
         <Route path="/pay-correct" element={<PayCorrect />} />
         <Route path="/pay-pending" element={<PayPending />} />
         <Route path="/pay-fail" element={<PayFail />} />
@@ -35,16 +35,16 @@ const App = () => {
             <Admin />
           </SecurityRoutes>}/>
 
-        
+
           <Route path="/agregar-producto" element={<SecurityRoutes>
             <AddProduct />
           </SecurityRoutes>}/>
-          
+
 
           <Route path="/admin-productos" element={<SecurityRoutes>
             <ProductsAdmin />
           </SecurityRoutes>}/>
-         
+
         </Route>
 
         <Route element={<AllProductsProvider />}>
