@@ -31,7 +31,7 @@ const ProductsPage = () => {
             </p>
           </div>
         ) : (
-          <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-6 xl:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
             {allProducts.map((item) => (
               <Product
                 key={item._id}
