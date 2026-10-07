@@ -1,6 +1,6 @@
 # 🛍️ E-Commerce | Proyecto Web para un cliente.
 
-## Despliegue: https://nunodeportes.netlify.app/
+## Despliegue: https://nuno-deportes.vercel.app/
 
 ## 📖 Descripción
 
@@ -18,9 +18,10 @@ El objetivo fue crear una web funcional, moderna y fácil de usar, para que el d
 - 👨‍💼 **Panel de administrador** para:
   - Agregar nuevos productos.
   - Eliminar productos existentes.
-  - Subir imágenes desde el panel.
+  - Subir imágenes desde el panel (almacenadas en Cloudinary).
 - 💳 **Integración con la API de Mercado Pago** para procesar pagos en línea.
-- 🔐 **Autenticación básica** en el panel de administrador.
+- 🔐 **Autenticación con JWT** (cookie HTTP-only) y claves hasheadas con bcrypt en el panel de administrador.
+- ✉️ **Formulario de contacto** con envío de emails vía Nodemailer.
 - 🗃️ **Base de datos** para almacenar los productos.
 
 ---
@@ -28,12 +29,18 @@ El objetivo fue crear una web funcional, moderna y fácil de usar, para que el d
 ## 🧰 Tecnologías Utilizadas
 
 ### 🖥️ Frontend
-- ReactJS
+- ReactJS + Vite
 - TailwindCSS
+- React Router y React Hook Form
 
 ### ⚙️ Backend
 - Express y NodeJS (JavaScript)  
-- MongoDB 
+- MongoDB (Mongoose)
+- Cloudinary (imágenes)
+- JWT + bcrypt (autenticación)
 
 ### 💳 Pasarela de pago
-- Mercado Pago API  
+- Mercado Pago API
+
+### 🚀 Despliegue
+- Vercel
