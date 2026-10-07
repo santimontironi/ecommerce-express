@@ -7,17 +7,6 @@ dotenv.config();
 
 export const createAdmin = async (req, res) => {
   try {
-
-    // El primer admin se puede crear libremente; a partir de ahí solo un admin logueado puede crear otros
-    const adminsCount = await Admin.countDocuments();
-    if (adminsCount > 0) {
-      try {
-        jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-      } catch {
-        return res.status(401).json({ message: "No autorizado" });
-      }
-    }
-
     const username = req.body.username?.trim();
     const { password } = req.body;
 
