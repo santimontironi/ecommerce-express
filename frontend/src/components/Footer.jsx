@@ -47,7 +47,7 @@ const Footer = () => {
                 <div className="container-page flex flex-col gap-2 py-5 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
                     <p>© {actualYear} Nuno Deportes. Todos los derechos reservados.</p>
                     <p>
-                        Desarrollado por <a className="font-semibold text-white hover:text-accent" href="https://github.com/santimontironi" target="_blank" rel="noopener noreferrer">Santiago Montironi</a>
+                        Desarrollado por <a className="font-semibold text-white hover:text-accent" href="https://www.fullwebportfolio.com" target="_blank" rel="noopener noreferrer">FullWeb</a>
                     </p>
                 </div>
             </div>
