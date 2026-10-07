@@ -5,11 +5,34 @@ import jwt from 'jsonwebtoken'
 
 dotenv.config();
 
-export const createAdmin = async () => {
+export const createAdmin = async (req, res) => {
   try {
 
-    const username = process.env.ADMIN_USERNAME;
-    const password = process.env.ADMIN_PASSWORD;
+    // El primer admin se puede crear libremente; a partir de ahí solo un admin logueado puede crear otros
+    const adminsCount = await Admin.countDocuments();
+    if (adminsCount > 0) {
+      try {
+        jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      } catch {
+        return res.status(401).json({ message: "No autorizado" });
+      }
+    }
+
+    const username = req.body.username?.trim();
+    const { password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ message: "El usuario y la clave son obligatorios" });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({ message: "La clave debe tener al menos 8 caracteres" });
+    }
+
+    const exists = await Admin.findOne({ username });
+    if (exists) {
+      return res.status(409).json({ message: "Ese usuario ya existe" });
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -17,10 +40,14 @@ export const createAdmin = async () => {
     const admin = new Admin({ username, password: hashedPassword });
     await admin.save();
 
-    console.log("Administrador creado!");
+    return res.status(201).json({
+      message: "Administrador creado correctamente",
+      admin: { _id: admin._id, username: admin.username },
+    });
 
   } catch (error) {
     console.error(error);
+    return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
